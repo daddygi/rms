@@ -16,8 +16,14 @@ export default function LoginPage() {
 
   useEffect(() => {
     if (!isLoading && user) {
-      console.log("Redirecting to /dashboard...");
-      router.replace("/dashboard");
+      const role = user.user_metadata?.role;
+      console.log("Role is:", role);
+
+      if (role === "admin") {
+        router.replace("/dashboard/admin");
+      } else {
+        router.replace("/dashboard");
+      }
     }
   }, [user, isLoading, router]);
 
