@@ -3,14 +3,17 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
 export function middleware(request: NextRequest) {
-  const isLoggedIn = request.cookies.get("sb-access-token");
+  const token = request.cookies.get("sb-access-token");
+
+  console.log("Middleware check – token:", token?.value);
 
   if (
     request.nextUrl.pathname.startsWith("/dashboard") ||
     request.nextUrl.pathname.startsWith("/admin")
   ) {
-    if (!isLoggedIn) {
-      return NextResponse.redirect(new URL("/login", request.url));
+    if (!token) {
+      // Comment this temporarily
+      // return NextResponse.redirect(new URL('/login', request.url))
     }
   }
 
