@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useUser } from "@/lib/AuthProvider";
+import Link from "next/link";
 
 export default function IncidentReportPage() {
   const { user, isLoading } = useUser();
@@ -64,7 +65,14 @@ export default function IncidentReportPage() {
 
   return (
     <main className="max-w-3xl mx-auto px-4 sm:px-6 py-8">
+      <Link
+        href="/dashboard"
+        className="inline-block mb-4 text-sm text-blue-600 hover:underline"
+      >
+        ← Back to Dashboard
+      </Link>
       <h1 className="text-2xl font-bold mb-6">Barangay Incident Report</h1>
+
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label className="block font-medium">Full Name of Complainant</label>

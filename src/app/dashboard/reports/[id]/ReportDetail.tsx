@@ -4,6 +4,7 @@ import { useRef } from "react";
 import { format } from "date-fns";
 // @ts-ignore
 import html2pdf from "html2pdf.js";
+import Link from "next/link";
 
 export default function ReportDetail({ report }: { report: any }) {
   const printRef = useRef<HTMLDivElement>(null);
@@ -24,6 +25,13 @@ export default function ReportDetail({ report }: { report: any }) {
 
   return (
     <main className="max-w-4xl mx-auto p-6">
+      <Link
+        href="/dashboard/reports"
+        className="inline-block mb-4 text-sm text-blue-600 hover:underline"
+      >
+        ← Back to My Reports
+      </Link>
+
       <h1 className="text-2xl font-bold mb-4">Incident Report Details</h1>
 
       <div className="mb-4">

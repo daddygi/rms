@@ -37,6 +37,13 @@ export default function ReportsPage() {
 
   return (
     <main className="max-w-4xl mx-auto p-6">
+      <Link
+        href="/dashboard"
+        className="inline-block mb-4 text-sm text-blue-600 hover:underline"
+      >
+        ← Back to Dashboard
+      </Link>
+
       <h1 className="text-2xl font-bold mb-4">My Submitted Reports</h1>
 
       {reports.length === 0 ? (

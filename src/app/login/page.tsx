@@ -20,7 +20,7 @@ export default function LoginPage() {
       console.log("Role is:", role);
 
       if (role === "admin") {
-        router.replace("/dashboard/admin");
+        router.replace("/admin/dashboard");
       } else {
         router.replace("/dashboard");
       }
@@ -31,18 +31,44 @@ export default function LoginPage() {
     e.preventDefault();
     setLoading(true);
     setError("");
+
     console.log("Logging in with:", email);
 
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
+    const { data: loginData, error: loginError } =
+      await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
 
-    if (error) {
-      console.error("Login error:", error.message);
-      setError(error.message);
+    if (loginError) {
+      console.error("Login error:", loginError.message);
+      setError(loginError.message);
+      setLoading(false);
+      return;
+    }
+
+    // ⏳ Wait a moment to allow Supabase to fully sync session (especially useful locally)
+    await new Promise((res) => setTimeout(res, 500));
+
+    const {
+      data: { user },
+      error: userError,
+    } = await supabase.auth.getUser();
+
+    if (userError) {
+      console.error("Failed to fetch user after login:", userError.message);
+      setError("Failed to fetch user after login.");
+      setLoading(false);
+      return;
+    }
+
+    const role = user?.user_metadata?.role;
+    console.log("✅ Role after login:", role);
+
+    if (role === "admin") {
+      router.replace("/admin/dashboard");
     } else {
-      console.log("Login success:", data);
+      router.replace("/dashboard");
     }
 
     setLoading(false);
