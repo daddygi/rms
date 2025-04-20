@@ -77,8 +77,9 @@ export default function LoginPage() {
 
   if (isLoading) return <p className="text-center mt-10">Loading...</p>;
 
+  // can use shadow-xl/20 instead of drop-shadow-lg
   return (
-    <main className="max-w-md mx-auto mt-10 px-4 sm:px-6 lg:px-8 min-h-screen">
+    <main className="max-w-md mx-auto mt-15 px-4 sm:px-6 lg:px-2 min-h-screen">
       <div className="flex justify-center mb-4">
         <Image
           src="/assets/logosample.svg"
@@ -90,31 +91,51 @@ export default function LoginPage() {
         />
       </div>
       <h2 className="text-4xl font-bold text-center uppercase">Subdivision</h2>
-      <h1 className="text-2xl font-semibold text-center mb-15 uppercase">
+      <h1 className="text-2xl font-semibold text-center mb-10 uppercase">
         Record management system
       </h1>
-      <div className="bg-white border rounded-xl shadow p-6 justify-center align-center">
-        <h1 className="text-2xl font-bold mb-4 text-center">Login</h1>
+
+      <div className="bg-white border border-gray-100 drop-shadow-lg p-8 justify-center align-center">
         <form onSubmit={handleLogin}>
-          <div className="mb-4">
-            <label className="block text-sm font-medium mb-1">Email</label>
+          <div className="relative w-full mb-6">
             <input
               type="email"
-              className="w-full px-3 py-2 border rounded"
+              className="block w-full px-3 py-3 text-sm text-gray-900 bg-transparent border border-gray-300 rounded-md appearance-none focus:outline-none focus:ring-0 focus:ring-black focus:border-black peer"
+              placeholder=" "
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
             />
+            <label
+              htmlFor="email"
+              className="absolute left-2 -top-3 text-xs px-2 bg-white text-black transition-all duration-200
+                          peer-placeholder-shown:text-sm peer-placeholder-shown:text-gray-400
+                          peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2
+                          peer-focus:-top-1 peer-focus:text-xs peer-focus:text-black peer-focus:bg-white peer-focus:font-medium"
+            >
+              Email
+            </label>
           </div>
-          <div className="mb-4">
-            <label className="block text-sm font-medium mb-1">Password</label>
+
+          <div className="relative w-full mb-6">
             <input
+              placeholder=" "
               type="password"
-              className="w-full px-3 py-2 border rounded"
+              className="block w-full px-3 py-3 text-sm text-gray-900 bg-transparent border border-gray-300 rounded-md appearance-none focus:outline-none focus:ring-0 focus:border-black peer"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
             />
+
+            <label
+              htmlFor="password"
+              className="absolute left-2 -top-2 text-xs px-2 bg-white text-black transition-all duration-200
+                          peer-placeholder-shown:text-sm peer-placeholder-shown:text-gray-400
+                          peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2
+                          peer-focus:-top-1 peer-focus:text-xs peer-focus:text-black peer-focus:bg-white peer-focus:font-medium"
+            >
+              Password
+            </label>
           </div>
           {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
           <button
