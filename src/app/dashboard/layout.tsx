@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
 import LogoutButton from "@/components/LogoutButton";
 import { useUser } from "@/lib/AuthProvider";
+import { useHasMounted } from "@/lib/hooks/useHasMounted";
 
 const navLinks = [
   { href: "/dashboard/report", label: "Incident Report" },
@@ -21,6 +22,13 @@ export default function DashboardLayout({
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const pathname = usePathname();
   const { user, isLoading } = useUser();
+  const hasMounted = useHasMounted();
+
+  const avatarChar =
+    hasMounted && user?.email ? user.email[0].toUpperCase() : "?";
+  const displayName = hasMounted
+    ? user?.user_metadata?.full_name || user?.email || "Guest"
+    : "Guest";
 
   return (
     <div className="flex h-screen w-full bg-gray-100 text-gray-900 overflow-hidden">
@@ -46,10 +54,10 @@ export default function DashboardLayout({
           </button>
           <div className="flex flex-col items-center gap-2 px-13 pt-5">
             <div className="h-12 w-12 rounded-full bg-black text-white flex items-center justify-center font-semibold text-lg">
-              {user?.email?.[0]?.toUpperCase() || "?"}
+              {avatarChar}
             </div>
             <span className="text-sm font-medium text-center">
-              {isLoading ? "Loading..." : user?.email || "Guest"}
+              {isLoading ? "Loading..." : displayName}
             </span>
           </div>
         </div>
