@@ -96,7 +96,6 @@ export default function LoginPage() {
       </h1>
 
       <div className="bg-white border border-gray-100 drop-shadow-lg p-8 justify-center align-center">
-        <h1 className="text-2xl font-bold mb-4 text-center">Login</h1>
         <form onSubmit={handleLogin}>
           <div className="relative w-full mb-6">
             <input
