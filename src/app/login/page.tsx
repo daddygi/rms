@@ -79,7 +79,7 @@ export default function LoginPage() {
 
   // can use shadow-xl/20 instead of drop-shadow-lg
   return (
-    <main className="max-w-md mx-auto mt-10 px-4 sm:px-6 lg:px-8 min-h-screen">
+    <main className="max-w-md mx-auto mt-15 px-4 sm:px-6 lg:px-2 min-h-screen">
       <div className="flex justify-center mb-4">
         <Image
           src="/assets/logosample.svg"
@@ -91,10 +91,11 @@ export default function LoginPage() {
         />
       </div>
       <h2 className="text-4xl font-bold text-center uppercase">Subdivision</h2>
-      <h1 className="text-2xl font-semibold text-center mb-15 uppercase">
+      <h1 className="text-2xl font-semibold text-center mb-10 uppercase">
         Record management system
       </h1>
-      <div className="bg-white border rounded-xl shadow p-6 justify-center align-center">
+
+      <div className="bg-white border border-gray-100 drop-shadow-lg p-8 justify-center align-center">
         <h1 className="text-2xl font-bold mb-4 text-center">Login</h1>
         <form onSubmit={handleLogin}>
           <div className="relative w-full mb-6">
