@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import { useUser } from "@/lib/AuthProvider";
+import Image from "next/image";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -78,7 +79,20 @@ export default function LoginPage() {
 
   return (
     <main className="max-w-md mx-auto mt-10 px-4 sm:px-6 lg:px-8 min-h-screen">
-      <h2 className="text-4xl font-bold text-center mb-24">RMS - Login</h2>
+      <div className="flex justify-center mb-4">
+        <Image
+          src="/assets/logosample.svg"
+          alt="Logo image"
+          width={120}
+          height={120}
+          className="object-contain h-auto w-auto max-w-[150px]"
+          priority
+        />
+      </div>
+      <h2 className="text-4xl font-bold text-center uppercase">Subdivision</h2>
+      <h1 className="text-2xl font-semibold text-center mb-15 uppercase">
+        Record management system
+      </h1>
       <div className="bg-white border rounded-xl shadow p-6 justify-center align-center">
         <h1 className="text-2xl font-bold mb-4 text-center">Login</h1>
         <form onSubmit={handleLogin}>
