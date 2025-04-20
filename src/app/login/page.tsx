@@ -77,8 +77,9 @@ export default function LoginPage() {
   if (isLoading) return <p className="text-center mt-10">Loading...</p>;
 
   return (
-    <main className="max-w-md mx-auto mt-10 px-4 sm:px-6 lg:px-8">
-      <div className="bg-white border rounded-xl shadow p-6">
+    <main className="max-w-md mx-auto mt-10 px-4 sm:px-6 lg:px-8 min-h-screen">
+      <h2 className="text-4xl font-bold text-center mb-24">RMS - Login</h2>
+      <div className="bg-white border rounded-xl shadow p-6 justify-center align-center">
         <h1 className="text-2xl font-bold mb-4 text-center">Login</h1>
         <form onSubmit={handleLogin}>
           <div className="mb-4">
