@@ -74,103 +74,124 @@ export default function IncidentReportPage() {
       <h1 className="text-2xl font-bold mb-6">Barangay Incident Report</h1>
 
       <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
-          <label className="block font-medium">Full Name of Complainant</label>
-          <input
-            name="full_name"
-            value={form.full_name}
-            onChange={handleChange}
-            required
-            className="w-full border px-3 py-2 rounded"
-          />
-        </div>
-
-        <div>
-          <label className="block font-medium">Address</label>
-          <input
-            name="address"
-            value={form.address}
-            onChange={handleChange}
-            required
-            className="w-full border px-3 py-2 rounded"
-          />
-        </div>
-
-        <div>
-          <label className="block font-medium">Contact Number</label>
-          <input
-            name="contact_number"
-            value={form.contact_number}
-            onChange={handleChange}
-            className="w-full border px-3 py-2 rounded"
-          />
-        </div>
-
-        <div>
-          <label className="block font-medium">Date and Time of Incident</label>
-          <input
-            name="datetime"
-            type="datetime-local"
-            value={form.datetime}
-            onChange={handleChange}
-            className="w-full border px-3 py-2 rounded"
-          />
-        </div>
-
-        <div>
-          <label className="block font-medium">Location</label>
-          <input
-            name="location"
-            value={form.location}
-            onChange={handleChange}
-            className="w-full border px-3 py-2 rounded"
-          />
-        </div>
-
-        <div>
-          <label className="block font-medium">Type of Incident</label>
-          <select
-            name="type"
-            value={form.type}
-            onChange={handleChange}
-            required
-            className="w-full border px-3 py-2 rounded"
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="w-full flex flex-col">
+            <label className="font-medium mb-1 text-sm sm:text-base">
+              Full Name of Complainant
+            </label>
+            <input
+              name="full_name"
+              value={form.full_name}
+              onChange={handleChange}
+              required
+              className="w-full border px-3 py-2 rounded"
+            />
+          </div>
+          <div className="w-full flex flex-col">
+            <label className="font-medium mb-1 text-sm sm:text-base">
+              Contact Number
+            </label>
+            <input
+              name="contact_number"
+              value={form.contact_number}
+              onChange={handleChange}
+              className="w-full border px-3 py-2 rounded"
+            />
+          </div>
+          <div className="col-span-1 sm:col-span-2 flex flex-col w-full">
+            <label className="font-medium mb-1 text-sm sm:text-base">
+              Address
+            </label>
+            <input
+              name="address"
+              value={form.address}
+              onChange={handleChange}
+              required
+              className="w-full border px-3 py-2 rounded"
+            />
+          </div>
+          <div className="w-full flex flex-col">
+            <label className="font-medium mb-1 text-sm sm:text-base">
+              Date and Time of Incident
+            </label>
+            <input
+              name="datetime"
+              type="datetime-local"
+              value={form.datetime}
+              onChange={handleChange}
+              className="w-full border px-3 py-2 rounded"
+            />
+          </div>
+          <div className="w-full flex flex-col">
+            <label className="font-medium mb-1 text-sm sm:text-base">
+              Location
+            </label>
+            <input
+              name="location"
+              value={form.location}
+              onChange={handleChange}
+              className="w-full border px-3 py-2 rounded"
+            />
+          </div>
+          <div className="col-span-1 sm:col-span-2 flex flex-col w-full">
+            <h2 className="text-m font-bold mb-2">Incident Details</h2>
+            <fieldset>
+              <legend className="block font-normal mb-1">
+                Type of Incident
+              </legend>
+              <div className="grid grid-cols-2 gap-y-2">
+                {[
+                  "Theft",
+                  "Noise Disturbance",
+                  "Harassment",
+                  "Vandalism",
+                  "Physical Assault",
+                  "Verbal Abuse/Threats",
+                  "Domestic Dispute",
+                  "Trespassing",
+                  "Property Damage",
+                  "Public Disturbance",
+                  "Other",
+                ].map((incident) => (
+                  <label
+                    key={incident}
+                    className="flex items-start space-x-2 min-w-[12rem] whitespace-normal"
+                  >
+                    <input
+                      type="radio"
+                      name="type"
+                      value={incident}
+                      checked={form.type === incident}
+                      onChange={handleChange}
+                      className="accent-blue-600 mt-1"
+                      required
+                    />
+                    <span>{incident}</span>
+                  </label>
+                ))}
+              </div>
+            </fieldset>
+          </div>
+          <div className="col-span-1 sm:col-span-2 flex flex-col w-full">
+            <label className="font-medium mb-1 text-sm sm:text-base">
+              Briefly Describe the Incident
+            </label>
+            <textarea
+              name="description"
+              value={form.description}
+              onChange={handleChange}
+              rows={4}
+              className="w-full border px-3 py-2 rounded"
+            />
+          </div>{" "}
+          {/* Additional fields to follow after confirming structure is working */}
+          <button
+            type="submit"
+            className="w-full bg-black text-white py-2 rounded hover:bg-gray-800"
           >
-            <option value="">-- Select Type --</option>
-            <option>Theft</option>
-            <option>Noise Disturbance</option>
-            <option>Harassment</option>
-            <option>Vandalism</option>
-            <option>Physical Assault</option>
-            <option>Verbal Abuse/Threats</option>
-            <option>Domestic Dispute</option>
-            <option>Trespassing</option>
-            <option>Property Damage</option>
-            <option>Public Disturbance</option>
-            <option>Other</option>
-          </select>
+            Submit Report
+          </button>
         </div>
-
-        <div>
-          <label className="block font-medium">
-            Briefly Describe the Incident
-          </label>
-          <textarea
-            name="description"
-            value={form.description}
-            onChange={handleChange}
-            rows={4}
-            className="w-full border px-3 py-2 rounded"
-          />
-        </div>
-
-        {/* Additional fields to follow after confirming structure is working */}
-        <button
-          type="submit"
-          className="w-full bg-black text-white py-2 rounded hover:bg-gray-800"
-        >
-          Submit Report
-        </button>
       </form>
     </main>
   );
