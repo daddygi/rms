@@ -292,7 +292,11 @@ export default function IncidentReportPage() {
 
           <button
             type="submit"
-            className="w-full bg-black text-white py-2 rounded hover:bg-gray-800"
+
+            className="w-full mt-5 bg-black text-white py-2 rounded hover:bg-gray-800"
+
+            
+
           >
             Submit Report
           </button>
