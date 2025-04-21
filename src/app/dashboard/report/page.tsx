@@ -4,10 +4,11 @@ import { useState } from "react";
 import { useUser } from "@/lib/AuthProvider";
 import Link from "next/link";
 import { RadioWithInput } from "@/components/inputs/RadioWithInput";
+import Modal from "@/components/Modal";
 
 export default function IncidentReportPage() {
   const { user } = useUser();
-  const [otherType, setOtherType] = useState("");
+
   const [form, setForm] = useState({
     full_name: "",
     address: "",
@@ -28,6 +29,39 @@ export default function IncidentReportPage() {
     preferred_action: "",
     preferred_action_detail: "",
   });
+
+  const [otherType, setOtherType] = useState("");
+
+  const [modal, setModal] = useState<{
+    open: boolean;
+    title: string;
+    message: string;
+    onConfirm?: () => void;
+  }>({
+    open: false,
+    title: "",
+    message: "",
+  });
+
+  const handleModalClose = () => {
+    setModal((prev) => ({ ...prev, open: false }));
+    setTimeout(() => {
+      setModal({ open: false, title: "", message: "", onConfirm: undefined });
+    }, 5000);
+  };
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value, type } = e.target;
+    const checked =
+      type === "checkbox" && (e.target as HTMLInputElement).checked;
+
+    setForm((prev) => ({
+      ...prev,
+      [name]: type === "checkbox" ? checked : value,
+    }));
+  };
 
   const handleBinaryRadioChange = (
     name: string,
@@ -67,41 +101,80 @@ export default function IncidentReportPage() {
     }));
   };
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    const { name, value, type } = e.target;
-    const checked =
-      type === "checkbox" && (e.target as HTMLInputElement).checked;
+  const handleFormSubmit = async () => {
+    try {
+      const res = await fetch("/api/incident", {
+        method: "POST",
+        body: JSON.stringify({
+          ...form,
+          type: form.type === "Other" ? otherType : form.type,
+          preferred_action:
+            form.preferred_action === "Other"
+              ? form.preferred_action_detail
+              : form.preferred_action,
+          user_id: user?.id,
+        }),
+      });
 
-    setForm((prev) => ({
-      ...prev,
-      [name]: type === "checkbox" ? checked : value,
-    }));
+      const result = await res.json();
+
+      if (res.ok) {
+        setModal({
+          open: true,
+          title: "Success",
+          message: "Incident submitted successfully!",
+        });
+
+        setForm({
+          full_name: "",
+          address: "",
+          contact_number: "",
+          datetime: "",
+          location: "",
+          type: "",
+          description: "",
+          suspects: "",
+          has_witnesses: false,
+          witness_info: "",
+          reported_to_authorities: false,
+          authorities_info: "",
+          damages_or_injuries: false,
+          damages_description: "",
+          has_evidence: false,
+          evidence_description: "",
+          preferred_action: "",
+          preferred_action_detail: "",
+        });
+
+        setOtherType("");
+      } else {
+        setModal({
+          open: true,
+          title: "Error",
+          message: result.error || "Something went wrong.",
+        });
+      }
+    } catch (error) {
+      setModal({
+        open: true,
+        title: "Error",
+        message: "An unexpected error occurred.",
+      });
+    }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    const res = await fetch("/api/incident", {
-      method: "POST",
-      body: JSON.stringify({
-        ...form,
-        type: form.type === "Other" ? otherType : form.type,
-        preferred_action:
-          form.preferred_action === "Other"
-            ? form.preferred_action_detail
-            : form.preferred_action,
-        user_id: user?.id,
-      }),
+    setModal({
+      open: true,
+      title: "Submit Incident Report?",
+      message: "Are you sure you want to submit this report?",
+      onConfirm: () => {
+        handleModalClose();
+        handleFormSubmit();
+      },
     });
-
-    const result = await res.json();
-    if (res.ok) {
-      alert("Incident submitted successfully!");
-    } else {
-      alert("Something went wrong.");
-    }
   };
 
   return (
@@ -292,16 +365,21 @@ export default function IncidentReportPage() {
 
           <button
             type="submit"
-
             className="w-full mt-5 bg-black text-white py-2 rounded hover:bg-gray-800"
-
-            
-
           >
             Submit Report
           </button>
         </div>
       </form>
+      <Modal
+        open={modal.open}
+        title={modal.title}
+        message={modal.message}
+        onClose={handleModalClose}
+        onConfirm={modal.onConfirm}
+        confirmLabel="Yes, proceed."
+        cancelLabel="Cancel"
+      />
     </main>
   );
 }
