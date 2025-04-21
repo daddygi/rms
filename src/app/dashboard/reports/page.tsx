@@ -66,7 +66,7 @@ export default function ReportsPage() {
         <PaginatedTable
           data={filteredReports}
           columns={columns}
-          rowsPerPage={10}
+          rowsPerPage={2}
         />
       )}
     </main>

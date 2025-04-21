@@ -34,7 +34,6 @@ export default function DashboardLayout({
     <div className="flex h-screen w-full bg-gray-100 text-gray-900 overflow-hidden">
       {/* Sidebar */}
       <aside
-
         className={`fixed top-0 left-0 z-40 h-full w-64 bg-white border-none shadow-xl/20 md:static transform transition-all duration-300 ease-in-out flex flex-col
         ${
           sidebarOpen
@@ -45,9 +44,6 @@ export default function DashboardLayout({
       >
         {/* Sidebar Header */}
         <div className="flex items-center justify-between px-4 py-4 border-b border-gray-200">
-
-
-
           {/* Close button for mobile */}
           <button
             className="absolute top-4 right-4 md:hidden text-gray-600 hover:text-black"
@@ -99,9 +95,6 @@ export default function DashboardLayout({
       <div className="flex flex-col flex-1 ">
         {/* Mobile Header */}
         <header className="md:hidden flex items-center justify-between px-4 py-4 bg-white  drop-shadow-lg">
-
-
-
           <div className="flex items-center gap-2">
             <button
               onClick={() => setSidebarOpen(true)}
