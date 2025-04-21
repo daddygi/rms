@@ -96,8 +96,8 @@ export default function AdminIncidentReportsPage() {
   }));
 
   return (
-    <main className="max-w-6xl mx-auto px-4 py-6">
-      <div className="flex items-center justify-between mb-6">
+    <main className="max-w-6xl mx-auto  py-6">
+      <div className="flex items-center justify-between mb-6 px-4">
         <h1 className="text-2xl font-bold">Incident Reports</h1>
         <button
           onClick={() => downloadCSV(reports)}
