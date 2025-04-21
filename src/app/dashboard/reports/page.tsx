@@ -75,7 +75,8 @@ export default function ReportsPage() {
         <PaginatedTable
           data={filteredReports}
           columns={columns}
-          rowsPerPage={2}
+          rowsPerPage={10}
+          dateField="raw_created_at"
         />
       )}
     </main>

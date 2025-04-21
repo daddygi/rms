@@ -1,6 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import PaginatedTable, { Column } from "@/components/PaginatedTable";
+import LazyLoader from "@/components/LazyLoaders/Spinner";
+import { Trash } from "lucide-react";
 
 type User = {
   id: string;
@@ -10,14 +13,27 @@ type User = {
   };
 };
 
+type ProcessedUser = {
+  id: string;
+  email: string;
+  role: string;
+};
+
 export default function AdminUsersPage() {
-  const [users, setUsers] = useState<User[]>([]);
+  const [users, setUsers] = useState<ProcessedUser[]>([]);
   const [loading, setLoading] = useState(true);
 
   const fetchUsers = async () => {
     const res = await fetch("/api/users/list");
     const { users } = await res.json();
-    setUsers(users);
+    const processed = users.map(
+      (u: User): ProcessedUser => ({
+        id: u.id,
+        email: u.email,
+        role: u.user_metadata?.role ?? "user",
+      })
+    );
+    setUsers(processed);
     setLoading(false);
   };
 
@@ -41,43 +57,36 @@ export default function AdminUsersPage() {
     fetchUsers();
   }, []);
 
+  const columns: Column<ProcessedUser>[] = [
+    { label: "Email", accessor: "email" },
+    { label: "Role", accessor: "role" },
+  ];
+
+  const renderActions = (user: ProcessedUser) => (
+    <button
+      onClick={() => deleteUser(user.id)}
+      className="text-red-500 hover:text-red-700"
+      title="Delete"
+    >
+      <Trash size={18} />
+    </button>
+  );
+
   return (
     <div className="max-w-4xl mx-auto p-6">
       <h1 className="text-2xl font-bold mb-4">All Users</h1>
 
       {loading ? (
-        <p>Loading...</p>
+        <LazyLoader />
       ) : users.length === 0 ? (
         <p>No users found.</p>
       ) : (
-        <table className="w-full border text-sm">
-          <thead>
-            <tr className="bg-gray-100">
-              <th className="text-left px-3 py-2">Email</th>
-              <th className="text-left px-3 py-2">Role</th>
-              <th className="text-left px-3 py-2">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {users.map((user) => (
-              <tr key={user.id} className="border-t">
-                <td className="px-3 py-2">{user.email}</td>
-                <td className="px-3 py-2">
-                  {user.user_metadata?.role ?? "user"}
-                </td>
-                <td className="px-3 py-2">
-                  <button
-                    onClick={() => deleteUser(user.id)}
-                    className="text-red-500 hover:underline"
-                  >
-                    Delete
-                  </button>
-                  {/* Add edit button later */}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <PaginatedTable
+          data={users}
+          columns={columns}
+          rowsPerPage={5}
+          renderActions={renderActions}
+        />
       )}
     </div>
   );

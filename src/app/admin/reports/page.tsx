@@ -116,6 +116,7 @@ export default function AdminIncidentReportsPage() {
           data={formattedReports}
           columns={columns}
           rowsPerPage={5}
+          dateField="raw_created_at"
         />
       )}
     </main>

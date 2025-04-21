@@ -14,11 +14,17 @@ type PaginatedTableProps<T extends { id: string }> = {
   data: T[];
   columns: Column<T>[];
   rowsPerPage?: number;
+  renderActions?: (row: T) => React.ReactNode;
+  dateField?: keyof T;
 };
 
-export default function PaginatedTable<
-  T extends { id: string; raw_created_at?: string }
->({ data, columns, rowsPerPage = 5 }: PaginatedTableProps<T>) {
+export default function PaginatedTable<T extends { id: string }>({
+  data,
+  columns,
+  rowsPerPage = 5,
+  renderActions,
+  dateField,
+}: PaginatedTableProps<T>) {
   const [currentPage, setCurrentPage] = useState(1);
   const [search, setSearch] = useState("");
   const [startDate, setStartDate] = useState("");
@@ -42,12 +48,24 @@ export default function PaginatedTable<
         String(value).toLowerCase().includes(searchText)
       );
 
-      const rawDate = new Date(row.raw_created_at ?? "")
-        .toISOString()
-        .slice(0, 10);
-      const isAfterStart = startDate ? rawDate >= startDate : true;
-      const isBeforeEnd = endDate ? rawDate <= endDate : true;
-      const matchesDateRange = isAfterStart && isBeforeEnd;
+      let matchesDateRange = true;
+
+      if (dateField) {
+        let rawDate = "";
+        try {
+          const dateVal = row[dateField];
+          rawDate =
+            typeof dateVal === "string"
+              ? new Date(dateVal).toISOString().slice(0, 10)
+              : "";
+        } catch {
+          rawDate = "";
+        }
+
+        const isAfterStart = startDate ? rawDate >= startDate : true;
+        const isBeforeEnd = endDate ? rawDate <= endDate : true;
+        matchesDateRange = isAfterStart && isBeforeEnd;
+      }
 
       return matchesSearch && matchesDateRange;
     })
@@ -78,49 +96,6 @@ export default function PaginatedTable<
       <div className="max-w-6xl mx-auto py-8">
         {/* Filters */}
         <div className="flex flex-col sm:flex-row justify-between gap-4 mb-4">
-          <div className="flex gap-4 w-full">
-            {/* Start Date */}
-            <div className="relative w-full">
-              <input
-                id="start-date"
-                type="date"
-                value={startDate}
-                onChange={(e) => {
-                  setCurrentPage(1);
-                  setStartDate(e.target.value);
-                }}
-                className="peer w-full px-3 pt-5 pb-2 rounded-md border bg-white border-gray-300 drop-shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder=" "
-              />
-              <label
-                htmlFor="start-date"
-                className="absolute left-3 top-2 text-sm text-gray-500 transition-all peer-placeholder-shown:top-2 peer-placeholder-shown:text-sm peer-focus:top-1 peer-focus:text-xs"
-              >
-                Start Date
-              </label>
-            </div>
-
-            {/* End Date */}
-            <div className="relative w-full">
-              <input
-                id="end-date"
-                type="date"
-                value={endDate}
-                onChange={(e) => {
-                  setCurrentPage(1);
-                  setEndDate(e.target.value);
-                }}
-                className="peer w-full px-3 pt-5 pb-2 rounded-md border bg-white border-gray-300 drop-shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder=" "
-              />
-              <label
-                htmlFor="end-date"
-                className="absolute left-3 top-2 text-sm text-gray-500 transition-all peer-placeholder-shown:top-2 peer-placeholder-shown:text-sm peer-focus:top-1 peer-focus:text-xs"
-              >
-                End Date
-              </label>
-            </div>
-          </div>
           <input
             type="text"
             placeholder="Search..."
@@ -131,6 +106,53 @@ export default function PaginatedTable<
             }}
             className="border bg-white border-gray-300 px-3 py-2 rounded w-full sm:w-1/2 drop-shadow-lg"
           />
+          <div className="flex gap-4 w-full">
+            {dateField && (
+              <>
+                {/* Start Date */}
+                <div className="relative w-full">
+                  <input
+                    id="start-date"
+                    type="date"
+                    value={startDate}
+                    onChange={(e) => {
+                      setCurrentPage(1);
+                      setStartDate(e.target.value);
+                    }}
+                    className="peer w-full px-3 pt-5 pb-2 rounded-md border bg-white border-gray-300 drop-shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder=" "
+                  />
+                  <label
+                    htmlFor="start-date"
+                    className="absolute left-3 top-2 text-sm text-gray-500 transition-all peer-placeholder-shown:top-2 peer-placeholder-shown:text-sm peer-focus:top-1 peer-focus:text-xs"
+                  >
+                    Start Date
+                  </label>
+                </div>
+
+                {/* End Date */}
+                <div className="relative w-full">
+                  <input
+                    id="end-date"
+                    type="date"
+                    value={endDate}
+                    onChange={(e) => {
+                      setCurrentPage(1);
+                      setEndDate(e.target.value);
+                    }}
+                    className="peer w-full px-3 pt-5 pb-2 rounded-md border bg-white border-gray-300 drop-shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    placeholder=" "
+                  />
+                  <label
+                    htmlFor="end-date"
+                    className="absolute left-3 top-2 text-sm text-gray-500 transition-all peer-placeholder-shown:top-2 peer-placeholder-shown:text-sm peer-focus:top-1 peer-focus:text-xs"
+                  >
+                    End Date
+                  </label>
+                </div>
+              </>
+            )}
+          </div>
         </div>
 
         {/* Desktop Table */}
@@ -170,27 +192,33 @@ export default function PaginatedTable<
                 ))}
                 <td className="px-4 py-3 text-center">
                   <div className="flex justify-center gap-3">
-                    <Link
-                      href={`/dashboard/reports/${row.id}`}
-                      className="text-blue-600 hover:text-blue-800"
-                      title="View"
-                    >
-                      <Eye size={18} />
-                    </Link>
-                    <Link
-                      href={`/dashboard/reports/${row.id}/edit`}
-                      className="text-yellow-600 hover:text-yellow-800"
-                      title="Edit"
-                    >
-                      <Pencil size={18} />
-                    </Link>
-                    <Link
-                      href={`/dashboard/reports/${row.id}/download`}
-                      className="text-green-600 hover:text-green-800"
-                      title="Download"
-                    >
-                      <Download size={18} />
-                    </Link>
+                    {renderActions ? (
+                      renderActions(row)
+                    ) : (
+                      <>
+                        <Link
+                          href={`/dashboard/reports/${row.id}`}
+                          className="text-blue-600 hover:text-blue-800"
+                          title="View"
+                        >
+                          <Eye size={18} />
+                        </Link>
+                        <Link
+                          href={`/dashboard/reports/${row.id}/edit`}
+                          className="text-yellow-600 hover:text-yellow-800"
+                          title="Edit"
+                        >
+                          <Pencil size={18} />
+                        </Link>
+                        <Link
+                          href={`/dashboard/reports/${row.id}/download`}
+                          className="text-green-600 hover:text-green-800"
+                          title="Download"
+                        >
+                          <Download size={18} />
+                        </Link>
+                      </>
+                    )}
                   </div>
                 </td>
               </tr>
@@ -229,27 +257,33 @@ export default function PaginatedTable<
                   </div>
                 ))}
               <div className="flex justify-end gap-4 px-5 py-3 border-t bg-gray-50">
-                <Link
-                  href={`/dashboard/reports/${row.id}`}
-                  className="text-blue-600 hover:text-blue-800"
-                  title="View"
-                >
-                  <Eye size={18} />
-                </Link>
-                <Link
-                  href={`/dashboard/reports/${row.id}/edit`}
-                  className="text-yellow-600 hover:text-yellow-800"
-                  title="Edit"
-                >
-                  <Pencil size={18} />
-                </Link>
-                <Link
-                  href={`/dashboard/reports/${row.id}/download`}
-                  className="text-green-600 hover:text-green-800"
-                  title="Download"
-                >
-                  <Download size={18} />
-                </Link>
+                {renderActions ? (
+                  renderActions(row)
+                ) : (
+                  <>
+                    <Link
+                      href={`/dashboard/reports/${row.id}`}
+                      className="text-blue-600 hover:text-blue-800"
+                      title="View"
+                    >
+                      <Eye size={18} />
+                    </Link>
+                    <Link
+                      href={`/dashboard/reports/${row.id}/edit`}
+                      className="text-yellow-600 hover:text-yellow-800"
+                      title="Edit"
+                    >
+                      <Pencil size={18} />
+                    </Link>
+                    <Link
+                      href={`/dashboard/reports/${row.id}/download`}
+                      className="text-green-600 hover:text-green-800"
+                      title="Download"
+                    >
+                      <Download size={18} />
+                    </Link>
+                  </>
+                )}
               </div>
             </div>
           ))}

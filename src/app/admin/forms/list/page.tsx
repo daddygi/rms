@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { listForms } from "@/lib/storage";
+import LazyLoader from "@/components/LazyLoaders/TableSkeleton";
 
 interface FileObject {
   name: string;
@@ -64,7 +65,7 @@ export default function AdminFormsPage() {
       <h1 className="text-2xl font-bold mb-4">Uploaded Forms</h1>
 
       {loading ? (
-        <p>Loading...</p>
+        <LazyLoader />
       ) : files.length === 0 ? (
         <p>No uploaded files found.</p>
       ) : (
