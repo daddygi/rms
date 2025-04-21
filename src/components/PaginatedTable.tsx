@@ -80,7 +80,7 @@ export default function PaginatedTable<
               setCurrentPage(1);
               setDateFilter(e.target.value);
             }}
-            className="border border-gray-300 px-3 py-2 rounded w-full sm:w-1/3"
+            className="border bg-white border-gray-300 px-3 py-2 rounded w-full sm:w-1/3 drop-shadow-lg"
           />
           <input
             type="text"
@@ -90,12 +90,12 @@ export default function PaginatedTable<
               setCurrentPage(1);
               setSearch(e.target.value);
             }}
-            className="border border-gray-300 px-3 py-2 rounded w-full sm:w-2/3"
+            className="border bg-white border-gray-300 px-3 py-2 rounded w-full sm:w-2/3 drop-shadow-lg"
           />
         </div>
 
         {/* Table for desktop */}
-        <table className="w-full hidden sm:table border border-gray-200 bg-white">
+        <table className="w-full hidden sm:table border border-gray-200 bg-white shadow-xl/20">
           <thead className="bg-gray-100 text-sm text-gray-600">
             <tr>
               {columns.map((col) => (
@@ -160,11 +160,11 @@ export default function PaginatedTable<
         </table>
 
         {/* Mobile card layout */}
-        <div className="sm:hidden space-y-4 mt-4 -mx-2 px-0">
+        <div className="sm:hidden space-y-4 mt-4 -mx-2 px-0 ">
           {currentData.map((row, index) => (
             <div
               key={index}
-              className="rounded-xl border shadow-sm bg-white overflow-hidden mx-2"
+              className="rounded-xl shadow-xl/20 bg-white overflow-hidden mx-2"
             >
               <div className="px-5 py-3 border-b bg-gray-50 flex items-center justify-between">
                 <span className="text-sm font-semibold text-gray-700">
