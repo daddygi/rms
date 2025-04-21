@@ -73,13 +73,13 @@ export default function AdminDashboard() {
     <main className="max-w-5xl mx-auto p-6">
       <h1 className="text-2xl font-bold mb-6">Admin Dashboard</h1>
 
-      <div className="grid sm:grid-cols-3 gap-6 mb-8">
-        <div className="bg-white border rounded-lg p-4 shadow-sm">
+      <div className="grid sm:grid-cols-3 gap-6 mb-4">
+        <div className="bg-white border border-gray-300 shadow-md rounded-lg p-4 ">
           <h2 className="text-sm text-gray-500">Total Reports</h2>
           <p className="text-3xl font-bold">{reportCount}</p>
         </div>
 
-        <div className="bg-white border rounded-lg p-4 shadow-sm col-span-2">
+        <div className="bg-white border border-gray-300 shadow-md rounded-lg p-4 col-span-2">
           <h2 className="text-sm text-gray-500 mb-2">Reports by Type</h2>
           <ul className="text-sm space-y-1">
             {Object.entries(typeBreakdown).map(([type, count]) => (
@@ -91,26 +91,7 @@ export default function AdminDashboard() {
           </ul>
         </div>
       </div>
-
-      <div className="bg-white border rounded-lg p-4 shadow-sm mb-4">
-        <h2 className="text-sm text-gray-500 mb-2">Latest Feedback</h2>
-        {latestFeedback.length === 0 ? (
-          <p className="text-sm text-gray-600">No feedback submitted yet.</p>
-        ) : (
-          <ul className="text-sm space-y-2">
-            {latestFeedback.map((f) => (
-              <li key={f.id} className="border-b pb-2">
-                <p className="text-gray-800">{f.message}</p>
-                <p className="text-xs text-gray-500 mt-1">
-                  From: {f.full_name ?? "Anonymous"} —{" "}
-                  {new Date(f.created_at).toLocaleString()}
-                </p>
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
-      <div className="bg-white border rounded-lg p-4 shadow-sm col-span-2">
+      <div className="bg-white border border-gray-300 shadow-md rounded-lg p-4 mb-4 col-span-2">
         <h2 className="text-sm text-gray-500 mb-2">Reports by Type</h2>
         <ResponsiveContainer width="100%" height={250}>
           <PieChart>
@@ -135,6 +116,25 @@ export default function AdminDashboard() {
             <Legend verticalAlign="bottom" height={36} />
           </PieChart>
         </ResponsiveContainer>
+      </div>
+
+      <div className="bg-white border border-gray-300 shadow-md rounded-lg p-4 ">
+        <h2 className="text-sm text-gray-500 mb-2">Latest Feedback</h2>
+        {latestFeedback.length === 0 ? (
+          <p className="text-sm text-gray-600">No feedback submitted yet.</p>
+        ) : (
+          <ul className="text-sm space-y-2">
+            {latestFeedback.map((f) => (
+              <li key={f.id} className="border-b pb-2">
+                <p className="text-gray-800">{f.message}</p>
+                <p className="text-xs text-gray-500 mt-1">
+                  From: {f.full_name ?? "Anonymous"} —{" "}
+                  {new Date(f.created_at).toLocaleString()}
+                </p>
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
     </main>
   );

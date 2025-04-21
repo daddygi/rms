@@ -6,14 +6,20 @@ import { format } from "date-fns";
 import Link from "next/link";
 import PaginatedTable, { Column } from "@/components/PaginatedTable";
 
+// Base type from backend
 type IncidentReport = {
   id: string;
-  created_at: string;
   type: string;
   location: string;
+  created_at: string;
 };
 
-const columns: Column<IncidentReport>[] = [
+// Extended type for formatted values
+type ExtendedIncidentReport = IncidentReport & {
+  raw_created_at: string;
+};
+
+const columns: Column<ExtendedIncidentReport>[] = [
   { label: "Report ID", accessor: "id" },
   { label: "Type", accessor: "type" },
   { label: "Location", accessor: "location" },
@@ -22,7 +28,9 @@ const columns: Column<IncidentReport>[] = [
 
 export default function ReportsPage() {
   const { user, isLoading } = useUser();
-  const [filteredReports, setFilteredReports] = useState<IncidentReport[]>([]);
+  const [filteredReports, setFilteredReports] = useState<
+    ExtendedIncidentReport[]
+  >([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -32,11 +40,12 @@ export default function ReportsPage() {
       const res = await fetch(`/api/incident?user_id=${user.id}`);
       const data = await res.json();
 
-      const formatted = data.map((r: any) => ({
+      const formatted: ExtendedIncidentReport[] = data.map((r: any) => ({
         id: r.id,
         type: r.type,
         location: r.location,
-        created_at: format(new Date(r.created_at), "yyyy-MM-dd HH:mm"),
+        raw_created_at: r.created_at,
+        created_at: format(new Date(r.created_at), "PPPpp"),
       }));
 
       setFilteredReports(formatted);
