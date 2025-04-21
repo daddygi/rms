@@ -10,6 +10,7 @@ import {
   ResponsiveContainer,
   Legend,
 } from "recharts";
+import LazyLoader from "@/components/LazyLoaders/Spinner";
 
 export default function AdminDashboard() {
   const [reportCount, setReportCount] = useState(0);
@@ -20,6 +21,7 @@ export default function AdminDashboard() {
   const [chartData, setChartData] = useState<{ name: string; value: number }[]>(
     []
   );
+  const [loading, setLoading] = useState(true);
 
   const COLORS = [
     "#8884d8",
@@ -34,6 +36,8 @@ export default function AdminDashboard() {
 
   useEffect(() => {
     const loadStats = async () => {
+      setLoading(true);
+
       const { data: reports, error: reportErr } = await supabase
         .from("incident_reports")
         .select("type");
@@ -64,17 +68,28 @@ export default function AdminDashboard() {
       if (!feedbackErr) {
         setLatestFeedback(feedback ?? []);
       }
+
+      setLoading(false);
     };
 
     loadStats();
   }, []);
+
+  if (loading) {
+    return (
+      <main className="max-w-5xl mx-auto p-6">
+        <h1 className="text-2xl font-bold mb-6">Admin Dashboard</h1>
+        <LazyLoader />
+      </main>
+    );
+  }
 
   return (
     <main className="max-w-5xl mx-auto p-6">
       <h1 className="text-2xl font-bold mb-6">Admin Dashboard</h1>
 
       <div className="grid sm:grid-cols-3 gap-6 mb-4">
-        <div className="bg-white border border-gray-300 shadow-md rounded-lg p-4 ">
+        <div className="bg-white border border-gray-300 shadow-md rounded-lg p-4">
           <h2 className="text-sm text-gray-500">Total Reports</h2>
           <p className="text-3xl font-bold">{reportCount}</p>
         </div>
@@ -91,6 +106,7 @@ export default function AdminDashboard() {
           </ul>
         </div>
       </div>
+
       <div className="bg-white border border-gray-300 shadow-md rounded-lg p-4 mb-4 col-span-2">
         <h2 className="text-sm text-gray-500 mb-2">Reports by Type</h2>
         <ResponsiveContainer width="100%" height={250}>
@@ -118,7 +134,7 @@ export default function AdminDashboard() {
         </ResponsiveContainer>
       </div>
 
-      <div className="bg-white border border-gray-300 shadow-md rounded-lg p-4 ">
+      <div className="bg-white border border-gray-300 shadow-md rounded-lg p-4">
         <h2 className="text-sm text-gray-500 mb-2">Latest Feedback</h2>
         {latestFeedback.length === 0 ? (
           <p className="text-sm text-gray-600">No feedback submitted yet.</p>
