@@ -10,18 +10,19 @@ export type Column<T> = {
   accessor: keyof T;
 };
 
-type PaginatedTableProps<T> = {
+type PaginatedTableProps<T extends { id: string }> = {
   data: T[];
   columns: Column<T>[];
   rowsPerPage?: number;
 };
 
 export default function PaginatedTable<
-  T extends { id: string; created_at: string }
+  T extends { id: string; raw_created_at?: string }
 >({ data, columns, rowsPerPage = 5 }: PaginatedTableProps<T>) {
   const [currentPage, setCurrentPage] = useState(1);
   const [search, setSearch] = useState("");
-  const [dateFilter, setDateFilter] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
   const [sortColumn, setSortColumn] = useState<keyof T | null>(null);
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
 
@@ -40,11 +41,15 @@ export default function PaginatedTable<
       const matchesSearch = Object.values(row).some((value) =>
         String(value).toLowerCase().includes(searchText)
       );
-      const matchesDate = dateFilter
-        ? new Date(row.created_at).toDateString() ===
-          new Date(dateFilter).toDateString()
-        : true;
-      return matchesSearch && matchesDate;
+
+      const rawDate = new Date(row.raw_created_at ?? "")
+        .toISOString()
+        .slice(0, 10);
+      const isAfterStart = startDate ? rawDate >= startDate : true;
+      const isBeforeEnd = endDate ? rawDate <= endDate : true;
+      const matchesDateRange = isAfterStart && isBeforeEnd;
+
+      return matchesSearch && matchesDateRange;
     })
     .sort((a, b) => {
       if (!sortColumn) return 0;
@@ -73,15 +78,49 @@ export default function PaginatedTable<
       <div className="max-w-6xl mx-auto py-8">
         {/* Filters */}
         <div className="flex flex-col sm:flex-row justify-between gap-4 mb-4">
-          <input
-            type="date"
-            value={dateFilter}
-            onChange={(e) => {
-              setCurrentPage(1);
-              setDateFilter(e.target.value);
-            }}
-            className="border bg-white border-gray-300 px-3 py-2 rounded w-full sm:w-1/3 drop-shadow-lg"
-          />
+          <div className="flex gap-4 w-full">
+            {/* Start Date */}
+            <div className="relative w-full">
+              <input
+                id="start-date"
+                type="date"
+                value={startDate}
+                onChange={(e) => {
+                  setCurrentPage(1);
+                  setStartDate(e.target.value);
+                }}
+                className="peer w-full px-3 pt-5 pb-2 rounded-md border bg-white border-gray-300 drop-shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder=" "
+              />
+              <label
+                htmlFor="start-date"
+                className="absolute left-3 top-2 text-sm text-gray-500 transition-all peer-placeholder-shown:top-2 peer-placeholder-shown:text-sm peer-focus:top-1 peer-focus:text-xs"
+              >
+                Start Date
+              </label>
+            </div>
+
+            {/* End Date */}
+            <div className="relative w-full">
+              <input
+                id="end-date"
+                type="date"
+                value={endDate}
+                onChange={(e) => {
+                  setCurrentPage(1);
+                  setEndDate(e.target.value);
+                }}
+                className="peer w-full px-3 pt-5 pb-2 rounded-md border bg-white border-gray-300 drop-shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder=" "
+              />
+              <label
+                htmlFor="end-date"
+                className="absolute left-3 top-2 text-sm text-gray-500 transition-all peer-placeholder-shown:top-2 peer-placeholder-shown:text-sm peer-focus:top-1 peer-focus:text-xs"
+              >
+                End Date
+              </label>
+            </div>
+          </div>
           <input
             type="text"
             placeholder="Search..."
@@ -90,11 +129,11 @@ export default function PaginatedTable<
               setCurrentPage(1);
               setSearch(e.target.value);
             }}
-            className="border bg-white border-gray-300 px-3 py-2 rounded w-full sm:w-2/3 drop-shadow-lg"
+            className="border bg-white border-gray-300 px-3 py-2 rounded w-full sm:w-1/2 drop-shadow-lg"
           />
         </div>
 
-        {/* Table for desktop */}
+        {/* Desktop Table */}
         <table className="w-full hidden sm:table border border-gray-200 bg-white shadow-xl/20">
           <thead className="bg-gray-100 text-sm text-gray-600">
             <tr>
@@ -159,8 +198,8 @@ export default function PaginatedTable<
           </tbody>
         </table>
 
-        {/* Mobile card layout */}
-        <div className="sm:hidden space-y-4 mt-4 -mx-2 px-0 ">
+        {/* Mobile Cards */}
+        <div className="sm:hidden space-y-4 mt-4 -mx-2 px-0">
           {currentData.map((row, index) => (
             <div
               key={index}
