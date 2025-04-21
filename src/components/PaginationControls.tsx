@@ -37,13 +37,13 @@ export default function PaginationControls({
   const pages = createPageNumbers();
 
   return (
-    <div className="flex items-center justify-center space-x-2 mt-8">
+    <div className="flex items-center justify-center space-x-2 mt-6 text-sm">
       <button
-        onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
+        onClick={() => onPageChange(currentPage - 1)}
         className="px-2 py-1 text-gray-600 hover:text-black disabled:text-gray-300"
       >
-        <ChevronLeft className="w-4 h-4 inline" /> Previous
+        <ChevronLeft className="w-4 h-4 inline" /> Prev
       </button>
       {pages.map((page, i) =>
         page === "..." ? (
@@ -54,7 +54,7 @@ export default function PaginationControls({
           <button
             key={i}
             onClick={() => onPageChange(page)}
-            className={`px-3 py-1 rounded text-sm ${
+            className={`px-3 py-1 rounded ${
               currentPage === page
                 ? "bg-black text-white"
                 : "text-black hover:bg-gray-200"
@@ -65,8 +65,8 @@ export default function PaginationControls({
         )
       )}
       <button
-        onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage === totalPages}
+        onClick={() => onPageChange(currentPage + 1)}
         className="px-2 py-1 text-gray-600 hover:text-black disabled:text-gray-300"
       >
         Next <ChevronRight className="w-4 h-4 inline" />
