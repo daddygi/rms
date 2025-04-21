@@ -168,7 +168,7 @@ export default function PaginatedTable<
             >
               <div className="px-5 py-3 border-b bg-gray-50 flex items-center justify-between">
                 <span className="text-sm font-semibold text-gray-700">
-                  Report ID:
+                  Report ID
                 </span>
                 <span className="text-sm text-blue-600 font-mono text-right break-all">
                   {row.id}

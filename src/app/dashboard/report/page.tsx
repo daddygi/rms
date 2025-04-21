@@ -127,7 +127,7 @@ export default function IncidentReportPage() {
               onChange={handleChange}
               required
               placeholder="Full Name"
-              className="w-full border px-3 py-2 rounded"
+              className="w-full bg-white border border-gray-300 shadow-md px-3 py-2 rounded "
             />
           </div>
 
@@ -140,7 +140,7 @@ export default function IncidentReportPage() {
               value={form.contact_number}
               onChange={handleChange}
               placeholder="Contact Number"
-              className="w-full border px-3 py-2 rounded"
+              className="w-full bg-white border border-gray-300 shadow-md px-3 py-2 rounded "
             />
           </div>
           <div className="col-span-1 sm:col-span-2 flex flex-col w-full">
@@ -153,7 +153,7 @@ export default function IncidentReportPage() {
               onChange={handleChange}
               placeholder="Address"
               required
-              className="col-span-2 border px-3 py-2 rounded"
+              className="col-span-2 bg-white border border-gray-300 shadow-md px-3 py-2 rounded"
             />
           </div>
           <div className="w-full flex flex-col">
@@ -165,7 +165,7 @@ export default function IncidentReportPage() {
               type="datetime-local"
               value={form.datetime}
               onChange={handleChange}
-              className="w-full border px-3 py-2 rounded"
+              className="w-full bg-white border border-gray-300 shadow-md  px-3 py-2 rounded"
             />
           </div>
           <div className="w-full flex flex-col">
@@ -177,12 +177,12 @@ export default function IncidentReportPage() {
               value={form.location}
               onChange={handleChange}
               placeholder="Location of Incident"
-              className="w-full border px-3 py-2 rounded"
+              className="w-full bg-white border border-gray-300 shadow-md  px-3 py-2 rounded"
             />
           </div>
           {/* Incident Type */}
           <div className="col-span-1 sm:col-span-2 flex flex-col w-full">
-            <div className="col-span-2">
+            <div className="col-span-2 ">
               <RadioWithInput
                 label="Type of Incident"
                 name="type"
@@ -214,7 +214,7 @@ export default function IncidentReportPage() {
               onChange={handleChange}
               rows={4}
               placeholder="Describe the incident..."
-              className="col-span-2 border px-3 py-2 rounded"
+              className="col-span-2 bg-white border border-gray-300 shadow-md  px-3 py-2 rounded"
             />
           </div>
 
@@ -228,7 +228,7 @@ export default function IncidentReportPage() {
               onChange={handleChange}
               rows={3}
               placeholder="Suspect(s) details (if any)"
-              className="col-span-2 border px-3 py-2 rounded"
+              className="col-span-2 bg-white border border-gray-300 shadow-md px-3 py-2 rounded"
             />
           </div>
 
