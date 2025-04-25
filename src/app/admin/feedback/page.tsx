@@ -16,18 +16,26 @@ export default function AdminFeedbackPage() {
   const [loading, setLoading] = useState(true);
 
   const fetchFeedback = async () => {
-    const { data, error } = await supabase
-      .from("feedback")
-      .select("*")
-      .order("created_at", { ascending: false });
+    try {
+      const { data, error } = await supabase
+        .from("feedback")
+        .select("*")
+        .order("created_at", { ascending: false });
 
-    if (error) {
-      console.error("Error fetching feedback:", error.message);
-    } else {
+      if (error) {
+        console.error("Error fetching feedback:", error.message);
+        return;
+      }
+
       setFeedback(data ?? []);
+    } catch (err) {
+      console.error(
+        "An unexpected error occurred while fetching feedback:",
+        err
+      );
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   };
 
   const handleDelete = async (id: string) => {

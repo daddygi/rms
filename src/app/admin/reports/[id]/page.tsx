@@ -16,19 +16,24 @@ export default function ReportDetailPage() {
 
   useEffect(() => {
     const fetchReport = async () => {
-      const { data, error } = await supabase
-        .from("incident_reports")
-        .select("*")
-        .eq("id", id)
-        .single();
+      try {
+        const { data, error } = await supabase
+          .from("incident_reports")
+          .select("*")
+          .eq("id", id)
+          .single();
 
-      if (error) {
-        console.error("Error fetching report:", error.message);
-      } else {
+        if (error) {
+          console.error("Error fetching report:", error.message);
+          return;
+        }
+
         setReport(data);
+      } catch (err) {
+        console.error("An unexpected error occurred:", err);
+      } finally {
+        setLoading(false);
       }
-
-      setLoading(false);
     };
 
     fetchReport();

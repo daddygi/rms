@@ -12,26 +12,6 @@ export default function Dashboard() {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <Link
-          href="/dashboard/report"
-          className="border rounded-lg p-4 hover:bg-gray-100 transition block"
-        >
-          <h2 className="font-semibold text-lg mb-1">Submit Incident Report</h2>
-          <p className="text-sm text-gray-600">
-            File a complaint or report an issue within the subdivision.
-          </p>
-        </Link>
-
-        <Link
-          href="dashboard/reports"
-          className="border rounded-lg p-4 hover:bg-gray-100 transition block"
-        >
-          <h2 className="font-semibold text-lg mb-1">My Reports</h2>
-          <p className="text-sm text-gray-600">
-            View your previously submitted incident reports.
-          </p>
-        </Link>
-
-        <Link
           href="/dashboard/forms"
           className="border rounded-lg p-4 hover:bg-gray-100 transition block"
         >

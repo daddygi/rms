@@ -18,22 +18,27 @@ export default function AdminFormsPage() {
   const fetchFiles = async () => {
     setLoading(true);
 
-    const { data, error } = await supabase.storage
-      .from("forms")
-      .list("uploads", {
-        limit: 100,
-        sortBy: { column: "name", order: "desc" },
-      });
+    try {
+      const { data, error } = await supabase.storage
+        .from("forms")
+        .list("uploads", {
+          limit: 100,
+          sortBy: { column: "name", order: "desc" },
+        });
 
-    console.log("Files from uploads:", data);
+      console.log("Files from uploads:", data);
 
-    if (error) {
-      console.error("Error fetching files:", error.message);
-    } else {
+      if (error) {
+        console.error("Error fetching files:", error.message);
+        return;
+      }
+
       setFiles(data ?? []);
+    } catch (err) {
+      console.error("An unexpected error occurred while fetching files:", err);
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   };
 
   const handleDelete = async (filename: string) => {
