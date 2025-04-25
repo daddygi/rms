@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import PaginatedTable, { Column } from "@/components/PaginatedTable";
+import NoData from "@/components/Nodata";
 import { format } from "date-fns";
 
 // Base incident report
@@ -26,18 +27,23 @@ export default function AdminIncidentReportsPage() {
   const [loading, setLoading] = useState(true);
 
   const fetchReports = async () => {
-    const { data, error } = await supabase
-      .from("incident_reports")
-      .select("*")
-      .order("created_at", { ascending: false });
+    try {
+      const { data, error } = await supabase
+        .from("incident_reports")
+        .select("*")
+        .order("created_at", { ascending: false });
 
-    if (error) {
-      console.error("Error fetching reports:", error.message);
-    } else {
+      if (error) {
+        console.error("Error fetching reports:", error.message);
+        return;
+      }
+
       setReports(data ?? []);
+    } catch (err) {
+      console.error("An unexpected error occurred:", err);
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   };
 
   const downloadCSV = (data: IncidentReport[]) => {
@@ -107,16 +113,18 @@ export default function AdminIncidentReportsPage() {
         </button>
       </div>
 
-      {loading ? (
-        <p>Loading reports...</p>
-      ) : reports.length === 0 ? (
-        <p>No incident reports submitted yet.</p>
+      {!loading && reports.length === 0 ? (
+        <NoData
+          message="No incident reports submitted yet."
+          imageSrc="/assets/noRecords.svg"
+        />
       ) : (
         <PaginatedTable
           data={formattedReports}
           columns={columns}
-          rowsPerPage={5}
+          rowsPerPage={10}
           dateField="raw_created_at"
+          isLoading={loading}
         />
       )}
     </main>

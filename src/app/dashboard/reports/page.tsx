@@ -5,6 +5,7 @@ import { useUser } from "@/lib/AuthProvider";
 import { format } from "date-fns";
 import Link from "next/link";
 import PaginatedTable, { Column } from "@/components/PaginatedTable";
+import NoData from "@/components/Nodata";
 
 // Base type from backend
 type IncidentReport = {
@@ -55,9 +56,6 @@ export default function ReportsPage() {
     fetchReports();
   }, [user]);
 
-  if (isLoading || loading)
-    return <p className="text-center mt-10">Loading reports...</p>;
-
   return (
     <main className="max-w-5xl mx-auto px-2 sm:px-6 py-6">
       <Link
@@ -69,14 +67,15 @@ export default function ReportsPage() {
 
       <h1 className="text-2xl font-bold mb-4">My Submitted Reports</h1>
 
-      {filteredReports.length === 0 ? (
-        <p className="text-gray-600">No reports found.</p>
+      {!loading && filteredReports.length === 0 ? (
+        <NoData message="No reports found." imageSrc="/assets/noRecords.svg" />
       ) : (
         <PaginatedTable
           data={filteredReports}
           columns={columns}
           rowsPerPage={10}
           dateField="raw_created_at"
+          isLoading={loading}
         />
       )}
     </main>
