@@ -108,7 +108,7 @@ export default function AdminUsersPage() {
   const renderActions = (user: ProcessedUser) => (
     <button
       onClick={() => confirmDelete(user)}
-      className="text-red-500 hover:text-red-700"
+      className="text-red-500 hover:text-red-700 cursor-pointer"
       title="Delete"
     >
       <Trash size={18} />

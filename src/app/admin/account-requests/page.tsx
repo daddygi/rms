@@ -135,9 +135,7 @@ export default function AccountRequestsPage() {
     <main className="max-w-6xl mx-auto p-6">
       <h1 className="text-2xl font-bold mb-6">Account Requests</h1>
 
-      {loading ? (
-        <LazyLoader />
-      ) : requests.length === 0 ? (
+      {!loading && requests.length === 0 ? (
         <NoData
           message="No pending account requests."
           imageSrc="/assets/noRecords.svg"
@@ -148,6 +146,7 @@ export default function AccountRequestsPage() {
           columns={columns}
           rowsPerPage={10}
           dateField="created_at"
+          isLoading={loading}
           renderActions={(row) => (
             <div className="flex gap-2">
               <button

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { Loader2, Send } from "lucide-react";
 
 export default function FeedbackPage() {
   const [form, setForm] = useState({
@@ -41,57 +42,94 @@ export default function FeedbackPage() {
   };
 
   return (
-    <main className="max-w-xl mx-auto p-6">
-      <Link
-        href="/dashboard"
-        className="inline-block mb-4 text-sm text-blue-600 hover:underline"
-      >
-        ← Back to Dashboard
-      </Link>
+    <main className="min-h-screen bg-gray-50 py-10 px-4">
+      <div className="max-w-xl mx-auto bg-white shadow-lg rounded-lg p-6 space-y-6">
+        <Link
+          href="/dashboard"
+          className="inline-block text-sm text-blue-600 hover:underline"
+        >
+          ← Back to Dashboard
+        </Link>
 
-      <h1 className="text-2xl font-bold mb-4">Submit Feedback</h1>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <input
-          name="name"
-          placeholder="Your name (optional)"
-          className="w-full border px-3 py-2 rounded"
-          value={form.name}
-          onChange={handleChange}
-        />
-        <input
-          name="email"
-          type="email"
-          placeholder="Email (optional)"
-          className="w-full border px-3 py-2 rounded"
-          value={form.email}
-          onChange={handleChange}
-        />
-        <select
-          name="type"
-          className="w-full border px-3 py-2 rounded"
-          value={form.type}
-          onChange={handleChange}
-        >
-          <option>Suggestion</option>
-          <option>Complaint</option>
-          <option>Compliment</option>
-        </select>
-        <textarea
-          name="message"
-          placeholder="Your feedback"
-          className="w-full border px-3 py-2 rounded min-h-[120px]"
-          value={form.message}
-          onChange={handleChange}
-          required
-        />
-        <button
-          type="submit"
-          className="bg-black text-white px-4 py-2 rounded hover:bg-gray-800"
-          disabled={loading}
-        >
-          {loading ? "Submitting..." : "Submit"}
-        </button>
-      </form>
+        <h1 className="text-2xl font-bold text-gray-800">Submit Feedback</h1>
+
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="block text-sm text-gray-700 mb-1">
+              Name (optional)
+            </label>
+            <input
+              name="name"
+              placeholder="Your name"
+              className="w-full border border-gray-300 px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              value={form.name}
+              onChange={handleChange}
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm text-gray-700 mb-1">
+              Email (optional)
+            </label>
+            <input
+              name="email"
+              type="email"
+              placeholder="Your email"
+              className="w-full border border-gray-300 px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              value={form.email}
+              onChange={handleChange}
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm text-gray-700 mb-1">
+              Feedback Type
+            </label>
+            <select
+              name="type"
+              className="w-full border border-gray-300 px-3 py-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              value={form.type}
+              onChange={handleChange}
+            >
+              <option>Suggestion</option>
+              <option>Complaint</option>
+              <option>Compliment</option>
+            </select>
+          </div>
+
+          <div>
+            <label className="block text-sm text-gray-700 mb-1">
+              Your Message
+            </label>
+            <textarea
+              name="message"
+              placeholder="Write your feedback here..."
+              className="w-full border border-gray-300 px-3 py-2 rounded min-h-[120px] resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+              value={form.message}
+              onChange={handleChange}
+              required
+            />
+          </div>
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="inline-flex items-center gap-2 bg-blue-600 text-white px-5 py-2 rounded hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition"
+          >
+            {loading ? (
+              <>
+                <Loader2 className="w-4 h-4 animate-spin" />
+                Submitting...
+              </>
+            ) : (
+              <>
+                <Send className="w-4 h-4" />
+                Submit
+              </>
+            )}
+          </button>
+        </form>
+      </div>
     </main>
   );
 }
