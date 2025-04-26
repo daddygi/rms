@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import { format } from "date-fns";
-// @ts-ignore
+// @ts-expect-error
 import html2pdf from "html2pdf.js";
 
 export default function ReportDetailPage() {

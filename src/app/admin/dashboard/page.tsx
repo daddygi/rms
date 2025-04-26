@@ -2,14 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
-import {
-  PieChart,
-  Pie,
-  Cell,
-  Tooltip,
-  ResponsiveContainer,
-  Legend,
-} from "recharts";
+import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
 import { MessageCircle, User, Clock } from "lucide-react";
 import { format } from "date-fns";
 import LazyLoader from "@/components/LazyLoaders/Spinner";

@@ -27,8 +27,6 @@ export default function AdminCreateUserPage() {
     message: "",
   });
 
-  const [pendingFormSubmit, setPendingFormSubmit] = useState(false);
-
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
@@ -73,7 +71,7 @@ export default function AdminCreateUserPage() {
       setModal({
         open: true,
         title: "Error",
-        message: "An unexpected error occurred.",
+        message: "An unexpected error occurred." + error,
       });
     }
   };

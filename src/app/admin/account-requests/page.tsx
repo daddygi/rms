@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import PaginatedTable, { Column } from "@/components/PaginatedTable";
 import Modal from "@/components/Modal";
 import { format } from "date-fns";
-import LazyLoader from "@/components/LazyLoaders/Spinner";
 import NoData from "@/components/Nodata";
 
 type AccountRequest = {
@@ -51,7 +50,7 @@ export default function AccountRequestsPage() {
         setModal({
           open: true,
           title: "Error",
-          message: "Failed to load account requests.",
+          message: "Failed to load account requests." + error,
         });
       } finally {
         setLoading(false);
