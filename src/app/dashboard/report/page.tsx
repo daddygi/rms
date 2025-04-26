@@ -352,6 +352,7 @@ export default function IncidentReportPage() {
           />
         </section>
 
+
         {/* Section: Preferred Action */}
         <section className="space-y-4">
           <h2 className="text-xl font-semibold text-gray-700 border-b pb-1">
@@ -377,6 +378,7 @@ export default function IncidentReportPage() {
         >
           Submit Incident Report
         </button>
+
       </form>
 
       <Modal
