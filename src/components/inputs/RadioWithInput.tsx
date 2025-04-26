@@ -60,7 +60,7 @@ export const RadioWithInput: React.FC<RadioWithInputProps> = (props) => {
             placeholder={inputLabel}
             value={inputValue}
             onChange={(e) => onChange(name, true, e.target.value)}
-            className="border px-3 py-2 rounded w-full mt-2"
+            className="bg-white border border-gray-300 shadow-md px-3 py-2 rounded w-full mt-2"
           />
         )}
       </fieldset>
@@ -98,7 +98,7 @@ export const RadioWithInput: React.FC<RadioWithInputProps> = (props) => {
             {value === "Other" && (
               <input
                 type="text"
-                className="border px-2 py-1 rounded flex-1"
+                className="bg-white border border-gray-300 shadow-md px-2 py-1 rounded flex-1"
                 placeholder="Please specify"
                 value={otherValue}
                 onChange={(e) => onChange(name, "Other", e.target.value)}

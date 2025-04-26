@@ -30,6 +30,7 @@ export default function AdminLayoutClient({
     { label: "Forms", href: "/admin/forms" },
     { label: "Forms List", href: "/admin/forms/list" },
     { label: "Users", href: "/admin/users" },
+    { label: "Account Requests", href: "/admin/account-requests" },
     { label: "Create User", href: "/admin/createUser" },
   ];
 

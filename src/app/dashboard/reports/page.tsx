@@ -6,14 +6,25 @@ import { format } from "date-fns";
 import Link from "next/link";
 import PaginatedTable, { Column } from "@/components/PaginatedTable";
 
+import NoData from "@/components/Nodata";
+
+
+// Base type from backend
 type IncidentReport = {
   id: string;
-  created_at: string;
   type: string;
   location: string;
+
+  created_at: string;
 };
 
-const columns: Column<IncidentReport>[] = [
+// Extended type for formatted values
+type ExtendedIncidentReport = IncidentReport & {
+  raw_created_at: string;
+};
+
+const columns: Column<ExtendedIncidentReport>[] = [
+
   { label: "Report ID", accessor: "id" },
   { label: "Type", accessor: "type" },
   { label: "Location", accessor: "location" },
@@ -22,7 +33,11 @@ const columns: Column<IncidentReport>[] = [
 
 export default function ReportsPage() {
   const { user, isLoading } = useUser();
-  const [filteredReports, setFilteredReports] = useState<IncidentReport[]>([]);
+
+  const [filteredReports, setFilteredReports] = useState<
+    ExtendedIncidentReport[]
+  >([]);
+
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -32,11 +47,14 @@ export default function ReportsPage() {
       const res = await fetch(`/api/incident?user_id=${user.id}`);
       const data = await res.json();
 
-      const formatted = data.map((r: any) => ({
+
+      const formatted: ExtendedIncidentReport[] = data.map((r: any) => ({
         id: r.id,
         type: r.type,
         location: r.location,
-        created_at: format(new Date(r.created_at), "yyyy-MM-dd HH:mm"),
+        raw_created_at: r.created_at,
+        created_at: format(new Date(r.created_at), "PPPpp"),
+
       }));
 
       setFilteredReports(formatted);
@@ -45,9 +63,6 @@ export default function ReportsPage() {
 
     fetchReports();
   }, [user]);
-
-  if (isLoading || loading)
-    return <p className="text-center mt-10">Loading reports...</p>;
 
   return (
     <main className="max-w-5xl mx-auto px-2 sm:px-6 py-6">
@@ -60,13 +75,19 @@ export default function ReportsPage() {
 
       <h1 className="text-2xl font-bold mb-4">My Submitted Reports</h1>
 
-      {filteredReports.length === 0 ? (
-        <p className="text-gray-600">No reports found.</p>
+
+      {!loading && filteredReports.length === 0 ? (
+        <NoData message="No reports found." imageSrc="/assets/noRecords.svg" />
+
       ) : (
         <PaginatedTable
           data={filteredReports}
           columns={columns}
-          rowsPerPage={2}
+
+          rowsPerPage={10}
+          dateField="raw_created_at"
+          isLoading={loading}
+
         />
       )}
     </main>

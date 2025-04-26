@@ -1,56 +1,77 @@
 "use client";
 
 import Link from "next/link";
+import {
+  FileText,
+  MessageCircle,
+  UserCircle,
+  Activity,
+  HelpCircle,
+} from "lucide-react";
 
 export default function Dashboard() {
   return (
-    <main className="max-w-4xl mx-auto p-6">
-      <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold">Welcome to your Dashboard 👋</h1>
-      </div>
-      <p className="mt-2 text-gray-600 mb-6">You're now logged in to RMS.</p>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <Link
-          href="/dashboard/report"
-          className="border rounded-lg p-4 hover:bg-gray-100 transition block"
-        >
-          <h2 className="font-semibold text-lg mb-1">Submit Incident Report</h2>
-          <p className="text-sm text-gray-600">
-            File a complaint or report an issue within the subdivision.
+    <main className="max-w-7xl mx-auto px-6 py-12 space-y-12">
+      {/* Welcome Header */}
+      <section className="flex items-center gap-4 bg-white/70 backdrop-blur-md border border-gray-200 rounded-2xl p-6 shadow transition hover:shadow-lg hover:bg-white">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900">Welcome back!</h1>
+          <p className="text-gray-600">
+            Glad to see you here. Check out what's new today.
           </p>
-        </Link>
+        </div>
+      </section>
 
-        <Link
-          href="dashboard/reports"
-          className="border rounded-lg p-4 hover:bg-gray-100 transition block"
-        >
-          <h2 className="font-semibold text-lg mb-1">My Reports</h2>
-          <p className="text-sm text-gray-600">
-            View your previously submitted incident reports.
-          </p>
-        </Link>
-
+      {/* Dashboard Cards */}
+      <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         <Link
           href="/dashboard/forms"
-          className="border rounded-lg p-4 hover:bg-gray-100 transition block"
+          className="group bg-white/70 backdrop-blur-md border border-gray-200 rounded-2xl p-6 shadow transition hover:shadow-lg hover:bg-white text-center"
         >
-          <h2 className="font-semibold text-lg mb-1">Downloadable Forms</h2>
+          <div className="flex justify-center mb-4">
+            <div className="bg-blue-100 text-blue-600 p-4 rounded-full shadow group-hover:scale-105 transition-transform">
+              <FileText className="w-10 h-10" />
+            </div>
+          </div>
+          <h2 className="text-lg font-semibold text-gray-800 mb-1">
+            Downloadable Forms
+          </h2>
           <p className="text-sm text-gray-600">
-            Access barangay forms for printing or submission.
+            Access official barangay forms for printing or submission.
           </p>
         </Link>
 
         <Link
           href="/dashboard/feedback"
-          className="border rounded-lg p-4 hover:bg-gray-100 transition block"
+          className="group bg-white/70 backdrop-blur-md border border-gray-200 rounded-2xl p-6 shadow transition hover:shadow-lg hover:bg-white text-center"
         >
-          <h2 className="font-semibold text-lg mb-1">Submit Feedback</h2>
+          <div className="flex justify-center mb-4">
+            <div className="bg-green-100 text-green-600 p-4 rounded-full shadow group-hover:scale-105 transition-transform">
+              <MessageCircle className="w-10 h-10" />
+            </div>
+          </div>
+          <h2 className="text-lg font-semibold text-gray-800 mb-1">
+            Submit Feedback
+          </h2>
           <p className="text-sm text-gray-600">
-            Share your feedback or suggestions with us.
+            Share your thoughts and help us improve the system.
           </p>
         </Link>
-      </div>
+
+        <div className="group bg-white/70 backdrop-blur-md border border-gray-200 rounded-2xl p-6 shadow transition hover:shadow-lg hover:bg-white text-center cursor-default">
+          <div className="flex justify-center mb-4">
+            <div className="bg-yellow-100 text-yellow-600 p-4 rounded-full shadow group-hover:scale-105 transition-transform">
+              <HelpCircle className="w-10 h-10" />
+            </div>
+          </div>
+          <h2 className="text-lg font-semibold text-gray-800 mb-1">
+            Need Help?
+          </h2>
+          <p className="text-sm text-gray-600">
+            Check our user guide or contact support for assistance.
+          </p>
+        </div>
+      </section>
     </main>
   );
 }
