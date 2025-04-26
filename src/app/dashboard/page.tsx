@@ -1,13 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import {
-  FileText,
-  MessageCircle,
-  UserCircle,
-  Activity,
-  HelpCircle,
-} from "lucide-react";
+import { FileText, MessageCircle, HelpCircle } from "lucide-react";
 
 export default function Dashboard() {
   return (

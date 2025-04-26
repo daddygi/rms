@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 import { format } from "date-fns";
-// @ts-ignore
+// @ts-expect-error
 import html2pdf from "html2pdf.js";
 import Link from "next/link";
 

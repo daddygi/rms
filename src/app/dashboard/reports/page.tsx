@@ -8,13 +8,11 @@ import PaginatedTable, { Column } from "@/components/PaginatedTable";
 
 import NoData from "@/components/Nodata";
 
-
 // Base type from backend
 type IncidentReport = {
   id: string;
   type: string;
   location: string;
-
   created_at: string;
 };
 
@@ -24,7 +22,6 @@ type ExtendedIncidentReport = IncidentReport & {
 };
 
 const columns: Column<ExtendedIncidentReport>[] = [
-
   { label: "Report ID", accessor: "id" },
   { label: "Type", accessor: "type" },
   { label: "Location", accessor: "location" },
@@ -32,7 +29,7 @@ const columns: Column<ExtendedIncidentReport>[] = [
 ];
 
 export default function ReportsPage() {
-  const { user, isLoading } = useUser();
+  const { user } = useUser();
 
   const [filteredReports, setFilteredReports] = useState<
     ExtendedIncidentReport[]
@@ -47,14 +44,12 @@ export default function ReportsPage() {
       const res = await fetch(`/api/incident?user_id=${user.id}`);
       const data = await res.json();
 
-
       const formatted: ExtendedIncidentReport[] = data.map((r: any) => ({
         id: r.id,
         type: r.type,
         location: r.location,
         raw_created_at: r.created_at,
         created_at: format(new Date(r.created_at), "PPPpp"),
-
       }));
 
       setFilteredReports(formatted);
@@ -75,19 +70,15 @@ export default function ReportsPage() {
 
       <h1 className="text-2xl font-bold mb-4">My Submitted Reports</h1>
 
-
       {!loading && filteredReports.length === 0 ? (
         <NoData message="No reports found." imageSrc="/assets/noRecords.svg" />
-
       ) : (
         <PaginatedTable
           data={filteredReports}
           columns={columns}
-
           rowsPerPage={10}
           dateField="raw_created_at"
           isLoading={loading}
-
         />
       )}
     </main>
