@@ -3,7 +3,7 @@ import { supabase } from "./supabase";
 export async function uploadForm(file: File, folder = "uploads") {
   const filePath = `${folder}/${file.name}`;
 
-  const { data, error } = await supabase.storage
+  const { error } = await supabase.storage
     .from("forms")
     .upload(filePath, file, {
       cacheControl: "3600",

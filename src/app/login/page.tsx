@@ -35,11 +35,10 @@ export default function LoginPage() {
 
     console.log("Logging in with:", email);
 
-    const { data: loginData, error: loginError } =
-      await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
+    const { error: loginError } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
 
     if (loginError) {
       console.error("Login error:", loginError.message);
