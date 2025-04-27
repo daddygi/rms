@@ -12,7 +12,6 @@ const nextConfig: NextConfig = {
       generator: {
         filename: "static/media/[name].[hash][ext]",
       },
-      ignoreDuringBuilds: true,
     });
 
     return config;
