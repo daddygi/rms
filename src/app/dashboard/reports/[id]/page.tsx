@@ -1,10 +1,34 @@
-// src/app/dashboard/reports/[id]/page.tsx
 import { db } from "@/db";
+
+// Keep this type definition at the top
+export interface IncidentReport {
+  id: string;
+  created_at: string;
+  full_name: string;
+  type: string;
+  location: string;
+  datetime: string;
+  address: string;
+  contact_number: string;
+  description: string;
+  suspects?: string;
+  has_witnesses?: boolean;
+  witness_info?: string;
+  reported_to_authorities?: boolean;
+  authorities_info?: string;
+  damages_or_injuries?: boolean;
+  damages_description?: string;
+  has_evidence?: boolean;
+  evidence_description?: string;
+  preferred_action?: string;
+}
+
 import { incidentReports } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { notFound } from "next/navigation";
 import ClientWrapper from "./ClientWrapper";
-import type { IncidentReport } from "./ClientWrapper"; // update import path if needed
+
+// DO NOT import IncidentReport from "./ClientWrapper" - use the one you defined above
 
 export default async function ReportPage({
   params,
@@ -18,7 +42,7 @@ export default async function ReportPage({
 
   if (!report) return notFound();
 
-  // Ensure all nullable fields are strings
+  // Normalize fields (null/undefined to "")
   const normalizedReport: IncidentReport = {
     id: report.id,
     full_name: report.full_name ?? "",
