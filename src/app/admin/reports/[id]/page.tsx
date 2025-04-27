@@ -4,13 +4,35 @@ import { useEffect, useRef, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import { format } from "date-fns";
-// @ts-expect-error
+// @ts-expect-error: html2pdf.js has no TypeScript types and is imported via CDN or CommonJS
 import html2pdf from "html2pdf.js";
+
+type IncidentReport = {
+  id: string;
+  created_at: string;
+  full_name: string;
+  type: string;
+  location: string;
+  datetime: string;
+  address: string;
+  contact_number: string;
+  description: string;
+  suspects?: string | null;
+  has_witnesses?: boolean;
+  witness_info?: string | null;
+  reported_to_authorities?: boolean;
+  authorities_info?: string | null;
+  damages_or_injuries?: boolean;
+  damages_description?: string | null;
+  has_evidence?: boolean;
+  evidence_description?: string | null;
+  preferred_action?: string | null;
+};
 
 export default function ReportDetailPage() {
   const { id } = useParams();
   const router = useRouter();
-  const [report, setReport] = useState<any>(null);
+  const [report, setReport] = useState<IncidentReport | null>(null);
   const [loading, setLoading] = useState(true);
   const printRef = useRef<HTMLDivElement>(null);
 
