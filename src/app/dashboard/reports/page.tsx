@@ -44,7 +44,8 @@ export default function ReportsPage() {
       const res = await fetch(`/api/incident?user_id=${user.id}`);
       const data = await res.json();
 
-      const formatted: ExtendedIncidentReport[] = data.map((r: any) => ({
+      const reportsArr = Array.isArray(data) ? (data as IncidentReport[]) : [];
+      const formatted: ExtendedIncidentReport[] = reportsArr.map((r) => ({
         id: r.id,
         type: r.type,
         location: r.location,
