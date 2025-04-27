@@ -229,7 +229,7 @@ export default function IncidentReportPage() {
           <div className="sm:col-span-2 grid grid-cols-3 gap-4">
             <div className="col-span-2 flex flex-col">
               <label className="font-medium mb-1 text-sm sm:text-base">
-                Tenant's Name
+                Tenant&#39;s Name
               </label>
               <input
                 name="datetime"
@@ -354,7 +354,7 @@ export default function IncidentReportPage() {
           <div className="sm:col-span-2 grid grid-cols-3 gap-4">
             <div className="col-span-2 flex flex-col">
               <label className="font-medium mb-1 text-sm sm:text-base">
-                Guardian's Name
+                Guardian&#39;s Name
               </label>
               <input
                 name="datetime"
@@ -395,7 +395,7 @@ export default function IncidentReportPage() {
           <div className="sm:col-span-2 grid grid-cols-3 gap-4">
             <div className="col-span-2 flex flex-col">
               <label className="font-medium mb-1 text-sm sm:text-base">
-                Guardian's Contact No.
+                Guardian&#39;s Contact No.
               </label>
               <input
                 name="datetime"
