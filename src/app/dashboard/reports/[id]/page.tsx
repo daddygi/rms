@@ -27,11 +27,7 @@ export interface IncidentReport {
   preferred_action?: string;
 }
 
-export default async function ReportPage({
-  params,
-}: {
-  params: { id: string };
-}) {
+export default async function Page({ params }: { params: { id: string } }) {
   const [report] = await db
     .select()
     .from(incidentReports)
