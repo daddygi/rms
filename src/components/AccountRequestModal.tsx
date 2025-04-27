@@ -40,10 +40,17 @@ export default function AccountRequestModal({
       return;
     }
 
-    const { confirmPassword, ...formData } = form;
     const res = await fetch("/api/account-request", {
       method: "POST",
-      body: JSON.stringify(formData),
+      body: JSON.stringify({
+        firstName: form.firstName,
+        middleInitial: form.middleInitial,
+        lastName: form.lastName,
+        contactNumber: form.contactNumber,
+        email: form.email,
+        password: form.password,
+        address: form.address,
+      }),
     });
 
     if (res.ok) {
