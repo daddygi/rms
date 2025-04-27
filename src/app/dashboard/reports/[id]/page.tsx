@@ -1,6 +1,10 @@
 import { db } from "@/db";
+import { incidentReports } from "@/db/schema";
+import { eq } from "drizzle-orm";
+import { notFound } from "next/navigation";
+import ClientWrapper from "./ClientWrapper";
 
-// Keep this type definition at the top
+// Do not import IncidentReport from another file; use the one here
 export interface IncidentReport {
   id: string;
   created_at: string;
@@ -23,13 +27,6 @@ export interface IncidentReport {
   preferred_action?: string;
 }
 
-import { incidentReports } from "@/db/schema";
-import { eq } from "drizzle-orm";
-import { notFound } from "next/navigation";
-import ClientWrapper from "./ClientWrapper";
-
-// DO NOT import IncidentReport from "./ClientWrapper" - use the one you defined above
-
 export default async function ReportPage({
   params,
 }: {
@@ -42,7 +39,6 @@ export default async function ReportPage({
 
   if (!report) return notFound();
 
-  // Normalize fields (null/undefined to "")
   const normalizedReport: IncidentReport = {
     id: report.id,
     full_name: report.full_name ?? "",
