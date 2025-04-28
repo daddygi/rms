@@ -27,11 +27,15 @@ export interface IncidentReport {
   preferred_action?: string;
 }
 
-export default async function Page({ params }: { params: { id: string } }) {
+type tParams = Promise<{ id: string }>;
+
+export default async function Page({ params }: { params: tParams }) {
+  const { id }: { id: string } = await params;
+  const mId = id;
   const [report] = await db
     .select()
     .from(incidentReports)
-    .where(eq(incidentReports.id, params.id));
+    .where(eq(incidentReports.id, mId));
 
   if (!report) return notFound();
 
