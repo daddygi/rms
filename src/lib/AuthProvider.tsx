@@ -3,6 +3,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { supabase } from "./supabase";
 import type { User } from "@supabase/supabase-js";
+import LazyLoader from "@/components/LazyLoaders/Spinner"; // 🌀 import your spinner
 
 type AuthContextType = {
   user: User | null;
@@ -34,8 +35,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     return () => listener?.subscription.unsubscribe();
   }, []);
 
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <LazyLoader />
+      </div>
+    );
+  }
+
   return (
-    <AuthContext.Provider value={{ user, isLoading }}>
+    <AuthContext.Provider value={{ user, isLoading: false }}>
       {children}
     </AuthContext.Provider>
   );

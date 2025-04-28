@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import { useUser } from "@/lib/AuthProvider";
 import Image from "next/image";
+import LazyLoader from "@/components/LazyLoaders/Spinner";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -18,13 +19,7 @@ export default function LoginPage() {
   useEffect(() => {
     if (!isLoading && user) {
       const role = user.user_metadata?.role;
-      console.log("Role is:", role);
-
-      if (role === "admin") {
-        router.replace("/admin/dashboard");
-      } else {
-        router.replace("/dashboard");
-      }
+      router.replace(role === "admin" ? "/admin/dashboard" : "/dashboard");
     }
   }, [user, isLoading, router]);
 
@@ -33,38 +28,38 @@ export default function LoginPage() {
     setLoading(true);
     setError("");
 
-    console.log("Logging in with:", email);
-
-    const { error: loginError } = await supabase.auth.signInWithPassword({
+    const { data, error: loginError } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
 
-    if (loginError) {
-      console.error("Login error:", loginError.message);
-      setError(loginError.message);
+    if (loginError || !data.user) {
+      setError(loginError?.message || "Login failed.");
       setLoading(false);
       return;
     }
 
-    // ⏳ Wait a moment to allow Supabase to fully sync session (especially useful locally)
-    await new Promise((res) => setTimeout(res, 500));
+    // Force session refresh and get fresh user metadata
+    await supabase.auth.getSession();
 
-    const {
-      data: { user },
-      error: userError,
-    } = await supabase.auth.getUser();
+    await fetch("/auth/callback", {
+      method: "POST",
+    });
 
-    if (userError) {
-      console.error("Failed to fetch user after login:", userError.message);
-      setError("Failed to fetch user after login.");
+    // Refresh user data to ensure you have the latest metadata
+    const { data: refreshedUserData, error: refreshedUserError } =
+      await supabase.auth.getUser();
+
+    if (refreshedUserError || !refreshedUserData.user) {
+      setError(refreshedUserError?.message || "Failed to refresh user data.");
       setLoading(false);
       return;
     }
 
-    const role = user?.user_metadata?.role;
-    console.log("✅ Role after login:", role);
+    const role = refreshedUserData.user.user_metadata?.role;
+    console.log("Role after login:", role); // Debugging log to check the role
 
+    // Redirect based on role
     if (role === "admin") {
       router.replace("/admin/dashboard");
     } else {
@@ -74,11 +69,16 @@ export default function LoginPage() {
     setLoading(false);
   };
 
-  if (isLoading) return <p className="text-center mt-10">Loading...</p>;
+  if (isLoading || loading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <LazyLoader />
+      </div>
+    );
+  }
 
-  // can use shadow-xl/20 instead of drop-shadow-lg
   return (
-    <main className="max-w-md mx-auto mt-15 px-4 sm:px-6 lg:px-2 min-h-screen">
+    <main className="max-w-md mx-auto px-4 sm:px-6 lg:px-2 min-h-screen flex flex-col justify-center">
       <div className="flex justify-center mb-4">
         <Image
           src="/assets/logosample.svg"
@@ -89,60 +89,63 @@ export default function LoginPage() {
           priority
         />
       </div>
+
       <h2 className="text-4xl font-bold text-center uppercase">Subdivision</h2>
       <h1 className="text-2xl font-semibold text-center mb-10 uppercase">
         Record management system
       </h1>
 
-      <div className="bg-white border border-gray-100 drop-shadow-lg p-8 justify-center align-center">
-        <form onSubmit={handleLogin}>
-          <div className="relative w-full mb-6">
+      <div className="bg-white border border-gray-100 drop-shadow-lg p-8">
+        <form onSubmit={handleLogin} className="space-y-6">
+          <div className="relative">
             <input
+              id="email"
               type="email"
-              className="block w-full px-3 py-3 text-sm text-gray-900 bg-transparent border border-gray-300 rounded-md appearance-none focus:outline-none focus:ring-0 focus:ring-black focus:border-black peer"
-              placeholder=" "
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
+              className="block w-full px-3 py-3 text-sm text-gray-900 bg-transparent border border-gray-300 rounded-md focus:outline-none focus:ring-0 focus:border-black peer"
+              placeholder=" "
             />
             <label
               htmlFor="email"
               className="absolute left-2 -top-3 text-xs px-2 bg-white text-black transition-all duration-200
-                          peer-placeholder-shown:text-sm peer-placeholder-shown:text-gray-400
-                          peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2
-                          peer-focus:-top-1 peer-focus:text-xs peer-focus:text-black peer-focus:bg-white peer-focus:font-medium"
+                peer-placeholder-shown:text-sm peer-placeholder-shown:text-gray-400
+                peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2
+                peer-focus:-top-1 peer-focus:text-xs peer-focus:text-black peer-focus:bg-white peer-focus:font-medium"
             >
               Email
             </label>
           </div>
 
-          <div className="relative w-full mb-6">
+          <div className="relative">
             <input
-              placeholder=" "
+              id="password"
               type="password"
-              className="block w-full px-3 py-3 text-sm text-gray-900 bg-transparent border border-gray-300 rounded-md appearance-none focus:outline-none focus:ring-0 focus:border-black peer"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
+              className="block w-full px-3 py-3 text-sm text-gray-900 bg-transparent border border-gray-300 rounded-md focus:outline-none focus:ring-0 focus:border-black peer"
+              placeholder=" "
             />
-
             <label
               htmlFor="password"
-              className="absolute left-2 -top-2 text-xs px-2 bg-white text-black transition-all duration-200
-                          peer-placeholder-shown:text-sm peer-placeholder-shown:text-gray-400
-                          peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2
-                          peer-focus:-top-1 peer-focus:text-xs peer-focus:text-black peer-focus:bg-white peer-focus:font-medium"
+              className="absolute left-2 -top-3 text-xs px-2 bg-white text-black transition-all duration-200
+                peer-placeholder-shown:text-sm peer-placeholder-shown:text-gray-400
+                peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2
+                peer-focus:-top-1 peer-focus:text-xs peer-focus:text-black peer-focus:bg-white peer-focus:font-medium"
             >
               Password
             </label>
           </div>
-          {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
+
+          {error && <p className="text-red-500 text-sm">{error}</p>}
+
           <button
             type="submit"
             className="w-full bg-black text-white py-2 rounded hover:bg-gray-800"
-            disabled={loading}
           >
-            {loading ? "Logging in..." : "Login"}
+            Login
           </button>
         </form>
       </div>
