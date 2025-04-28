@@ -62,43 +62,43 @@ export default function IncidentReportPage() {
     }));
   };
 
-  const handleBinaryRadioChange = (
-    name: string,
-    value: boolean,
-    input?: string
-  ) => {
-    const inputMap: { [key: string]: string } = {
-      has_witnesses: "witness_info",
-      reported_to_authorities: "authorities_info",
-      damages_or_injuries: "damages_description",
-      has_evidence: "evidence_description",
-    };
+  // const handleBinaryRadioChange = (
+  //   name: string,
+  //   value: boolean,
+  //   input?: string
+  // ) => {
+  //   const inputMap: { [key: string]: string } = {
+  //     has_witnesses: "witness_info",
+  //     reported_to_authorities: "authorities_info",
+  //     damages_or_injuries: "damages_description",
+  //     has_evidence: "evidence_description",
+  //   };
 
-    const inputField = inputMap[name];
-    setForm((prev) => ({
-      ...prev,
-      [name]: value,
-      ...(inputField && { [inputField]: input || "" }),
-    }));
-  };
+  //   const inputField = inputMap[name];
+  //   setForm((prev) => ({
+  //     ...prev,
+  //     [name]: value,
+  //     ...(inputField && { [inputField]: input || "" }),
+  //   }));
+  // };
 
-  const handleOtherRadioChange = (
-    name: string,
-    value: string,
-    other?: string
-  ) => {
-    if (name === "type") {
-      setOtherType(other || "");
-    }
+  // const handleOtherRadioChange = (
+  //   name: string,
+  //   value: string,
+  //   other?: string
+  // ) => {
+  //   if (name === "type") {
+  //     setOtherType(other || "");
+  //   }
 
-    setForm((prev) => ({
-      ...prev,
-      [name]: value,
-      ...(name === "preferred_action" && value === "Other"
-        ? { preferred_action_detail: other || "" }
-        : { preferred_action_detail: "" }),
-    }));
-  };
+  //   setForm((prev) => ({
+  //     ...prev,
+  //     [name]: value,
+  //     ...(name === "preferred_action" && value === "Other"
+  //       ? { preferred_action_detail: other || "" }
+  //       : { preferred_action_detail: "" }),
+  //   }));
+  // };
 
   const handleFormSubmit = async () => {
     try {
@@ -157,7 +157,7 @@ export default function IncidentReportPage() {
       setModal({
         open: true,
         title: "Error",
-        message: "An unexpected error occurred.",
+        message: "An unexpected error occurred." + error,
       });
     }
   };
@@ -229,7 +229,7 @@ export default function IncidentReportPage() {
           <div className="sm:col-span-2 grid grid-cols-3 gap-4">
             <div className="col-span-2 flex flex-col">
               <label className="font-medium mb-1 text-sm sm:text-base">
-                Tenant's Name
+                Tenant&#39;s Name
               </label>
               <input
                 name="datetime"
@@ -354,7 +354,7 @@ export default function IncidentReportPage() {
           <div className="sm:col-span-2 grid grid-cols-3 gap-4">
             <div className="col-span-2 flex flex-col">
               <label className="font-medium mb-1 text-sm sm:text-base">
-                Guardian's Name
+                Guardian&#39;s Name
               </label>
               <input
                 name="datetime"
@@ -395,7 +395,7 @@ export default function IncidentReportPage() {
           <div className="sm:col-span-2 grid grid-cols-3 gap-4">
             <div className="col-span-2 flex flex-col">
               <label className="font-medium mb-1 text-sm sm:text-base">
-                Guardian's Contact No.
+                Guardian&#39;s Contact No.
               </label>
               <input
                 name="datetime"

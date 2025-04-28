@@ -2,24 +2,24 @@
 
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
-import {
-  PieChart,
-  Pie,
-  Cell,
-  Tooltip,
-  ResponsiveContainer,
-  Legend,
-} from "recharts";
+import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
 import { MessageCircle, User, Clock } from "lucide-react";
 import { format } from "date-fns";
 import LazyLoader from "@/components/LazyLoaders/Spinner";
+
+type Feedback = {
+  id: string;
+  message: string;
+  full_name?: string | null;
+  created_at: string;
+};
 
 export default function AdminDashboard() {
   const [reportCount, setReportCount] = useState(0);
   const [typeBreakdown, setTypeBreakdown] = useState<Record<string, number>>(
     {}
   );
-  const [latestFeedback, setLatestFeedback] = useState<any[]>([]);
+  const [latestFeedback, setLatestFeedback] = useState<Feedback[]>([]);
   const [chartData, setChartData] = useState<{ name: string; value: number }[]>(
     []
   );

@@ -31,6 +31,7 @@ export default function PaginatedTable<T extends { id: string }>({
   const [search, setSearch] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
+
   const [sortColumn, setSortColumn] = useState<keyof T | null>(null);
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
 
@@ -155,6 +156,7 @@ export default function PaginatedTable<T extends { id: string }>({
         </div>
 
         {/* Desktop Table */}
+
         <table className="w-full hidden sm:table border border-gray-200 bg-white shadow-xl/20">
           <thead className="bg-gray-100 text-sm text-gray-600">
             <tr>

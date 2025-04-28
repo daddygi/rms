@@ -57,9 +57,7 @@ export default function AdminFormsPage() {
 
   const handleDelete = async (filename: string) => {
     const fullPath = `uploads/${filename}`;
-    const { data, error } = await supabase.storage
-      .from("forms")
-      .remove([fullPath]);
+    const { error } = await supabase.storage.from("forms").remove([fullPath]);
 
     if (error) {
       console.error("Delete error:", error.message);

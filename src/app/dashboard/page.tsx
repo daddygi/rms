@@ -1,13 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import {
-  FileText,
-  MessageCircle,
-  UserCircle,
-  Activity,
-  HelpCircle,
-} from "lucide-react";
+import { FileText, MessageCircle, HelpCircle } from "lucide-react";
 
 export default function Dashboard() {
   return (
@@ -17,7 +11,7 @@ export default function Dashboard() {
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Welcome back!</h1>
           <p className="text-gray-600">
-            Glad to see you here. Check out what's new today.
+            Glad to see you here. Check out what&#39;s new today.
           </p>
         </div>
       </section>

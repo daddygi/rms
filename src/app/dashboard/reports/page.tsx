@@ -5,6 +5,7 @@ import { useUser } from "@/lib/AuthProvider";
 import { format } from "date-fns";
 import Link from "next/link";
 import PaginatedTable, { Column } from "@/components/PaginatedTable";
+
 import NoData from "@/components/Nodata";
 
 // Base type from backend
@@ -28,10 +29,12 @@ const columns: Column<ExtendedIncidentReport>[] = [
 ];
 
 export default function ReportsPage() {
-  const { user, isLoading } = useUser();
+  const { user } = useUser();
+
   const [filteredReports, setFilteredReports] = useState<
     ExtendedIncidentReport[]
   >([]);
+
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -41,7 +44,8 @@ export default function ReportsPage() {
       const res = await fetch(`/api/incident?user_id=${user.id}`);
       const data = await res.json();
 
-      const formatted: ExtendedIncidentReport[] = data.map((r: any) => ({
+      const reportsArr = Array.isArray(data) ? (data as IncidentReport[]) : [];
+      const formatted: ExtendedIncidentReport[] = reportsArr.map((r) => ({
         id: r.id,
         type: r.type,
         location: r.location,

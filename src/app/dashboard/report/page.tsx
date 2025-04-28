@@ -158,7 +158,7 @@ export default function IncidentReportPage() {
       setModal({
         open: true,
         title: "Error",
-        message: "An unexpected error occurred.",
+        message: "An unexpected error occurred." + error,
       });
     }
   };

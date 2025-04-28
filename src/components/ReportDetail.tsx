@@ -2,11 +2,12 @@
 
 import { useRef } from "react";
 import { format } from "date-fns";
-// @ts-ignore
+// @ts-expect-error: No types for html2pdf.js package
 import html2pdf from "html2pdf.js";
 import Link from "next/link";
+import type { IncidentReport } from "./ClientWrapper";
 
-export default function ReportDetail({ report }: { report: any }) {
+export default function ReportDetail({ report }: { report: IncidentReport }) {
   const printRef = useRef<HTMLDivElement>(null);
 
   const handleDownload = () => {

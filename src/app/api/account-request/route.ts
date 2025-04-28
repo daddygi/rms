@@ -33,6 +33,7 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ success: true });
   } catch (error) {
+    console.error("POST /api/account-request error:", error);
     return NextResponse.json(
       { error: "Invalid request body." },
       { status: 400 }
@@ -53,6 +54,7 @@ export async function GET() {
 
     return NextResponse.json({ requests: data });
   } catch (error) {
+    console.error("GET /api/account-request error:", error);
     return NextResponse.json(
       { error: "Failed to fetch account requests." },
       { status: 500 }

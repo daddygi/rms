@@ -10,7 +10,7 @@ import { useHasMounted } from "@/lib/hooks/useHasMounted";
 
 const navLinks = [
   { href: "/dashboard/report", label: "Incident Report" },
-  { href: "/dashboard/information", label: "Information Sheet" },
+  // { href: "/dashboard/information", label: "Information Sheet" },
   { href: "/dashboard/reports", label: "History" },
 ];
 
