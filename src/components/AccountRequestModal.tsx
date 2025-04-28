@@ -64,7 +64,7 @@ export default function AccountRequestModal({
   useEffect(() => {
     if (submitted) {
       if (countdown === 0) {
-        router.push("https://localhost:3000/"); // Redirect to login page
+        window.location.href = "/"; // Redirect to login page
       } else {
         const timer = setTimeout(() => {
           setCountdown((prev) => prev - 1);

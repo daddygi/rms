@@ -10,7 +10,6 @@ export type Column<T> = {
   accessor: keyof T;
 };
 
-
 type PaginatedTableProps<T extends { id: string }> = {
   data: T[];
   columns: Column<T>[];
@@ -52,7 +51,6 @@ export default function PaginatedTable<T extends { id: string }>({
         String(value).toLowerCase().includes(searchText)
       );
 
-
       let matchesDateRange = true;
 
       if (dateField) {
@@ -73,7 +71,6 @@ export default function PaginatedTable<T extends { id: string }>({
       }
 
       return matchesSearch && matchesDateRange;
-
     })
     .sort((a, b) => {
       if (!sortColumn) return 0;
@@ -103,8 +100,6 @@ export default function PaginatedTable<T extends { id: string }>({
         {/* Filters */}
         <div className="flex flex-col sm:flex-row justify-between gap-4 mb-4">
           <input
-
-
             type="text"
             placeholder="Search..."
             value={search}
@@ -112,7 +107,6 @@ export default function PaginatedTable<T extends { id: string }>({
               setCurrentPage(1);
               setSearch(e.target.value);
             }}
-
             className="border bg-white border-gray-300 px-3 py-2 rounded w-full sm:w-1/2 drop-shadow-lg"
           />
           <div className="flex gap-4 w-full">
@@ -187,7 +181,6 @@ export default function PaginatedTable<T extends { id: string }>({
             </tr>
           </thead>
           <tbody>
-
             {isLoading
               ? [...Array(rowsPerPage)].map((_, idx) => (
                   <tr key={idx} className="border-t animate-pulse">
@@ -350,7 +343,6 @@ export default function PaginatedTable<T extends { id: string }>({
             onPageChange={setCurrentPage}
           />
         )}
-
       </div>
     </div>
   );
