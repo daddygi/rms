@@ -31,11 +31,11 @@ type tParams = Promise<{ id: string }>;
 
 export default async function Page({ params }: { params: tParams }) {
   const { id }: { id: string } = await params;
-  const mId = id;
+  const nId = id;
   const [report] = await db
     .select()
     .from(incidentReports)
-    .where(eq(incidentReports.id, mId));
+    .where(eq(incidentReports.id, nId));
 
   if (!report) return notFound();
 
