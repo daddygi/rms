@@ -19,11 +19,7 @@ export default function LoginPage() {
   useEffect(() => {
     if (!isLoading && user) {
       const role = user.user_metadata?.role;
-      if (role === "admin") {
-        router.replace("/admin/dashboard");
-      } else {
-        router.replace("/dashboard");
-      }
+      router.replace(role === "admin" ? "/admin/dashboard" : "/dashboard");
     }
   }, [user, isLoading, router]);
 
@@ -32,31 +28,38 @@ export default function LoginPage() {
     setLoading(true);
     setError("");
 
-    const { error: loginError } = await supabase.auth.signInWithPassword({
+    const { data, error: loginError } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
 
-    if (loginError) {
-      setError(loginError.message);
+    if (loginError || !data.user) {
+      setError(loginError?.message || "Login failed.");
       setLoading(false);
       return;
     }
 
-    await new Promise((res) => setTimeout(res, 500)); // slight delay
+    // Force session refresh and get fresh user metadata
+    await supabase.auth.getSession();
 
-    const {
-      data: { user: loggedInUser },
-      error: userError,
-    } = await supabase.auth.getUser();
+    await fetch("/auth/callback", {
+      method: "POST",
+    });
 
-    if (userError || !loggedInUser) {
-      setError("Failed to fetch user after login.");
+    // Refresh user data to ensure you have the latest metadata
+    const { data: refreshedUserData, error: refreshedUserError } =
+      await supabase.auth.getUser();
+
+    if (refreshedUserError || !refreshedUserData.user) {
+      setError(refreshedUserError?.message || "Failed to refresh user data.");
       setLoading(false);
       return;
     }
 
-    const role = loggedInUser.user_metadata?.role;
+    const role = refreshedUserData.user.user_metadata?.role;
+    console.log("Role after login:", role); // Debugging log to check the role
+
+    // Redirect based on role
     if (role === "admin") {
       router.replace("/admin/dashboard");
     } else {
