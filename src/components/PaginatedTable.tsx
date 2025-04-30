@@ -222,13 +222,6 @@ export default function PaginatedTable<T extends { id: string }>({
                               <Eye size={18} />
                             </Link>
                             <Link
-                              href={`/dashboard/reports/${row.id}/edit`}
-                              className="text-yellow-600 hover:text-yellow-800"
-                              title="Edit"
-                            >
-                              <Pencil size={18} />
-                            </Link>
-                            <Link
                               href={`/dashboard/reports/${row.id}/download`}
                               className="text-green-600 hover:text-green-800"
                               title="Download"
