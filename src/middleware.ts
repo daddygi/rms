@@ -16,6 +16,7 @@ export async function middleware(req: NextRequest) {
 
   console.log("Middleware - User Data:", user);
   console.log("Middleware - Role:", role);
+  console.log("Middleware - Error:", error);
 
   if (!user) {
     // No session found
