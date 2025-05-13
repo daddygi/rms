@@ -35,7 +35,13 @@ export default function AccountRequestsPage() {
   useEffect(() => {
     const fetchRequests = async () => {
       try {
-        const res = await fetch("/api/account-request/list");
+        const res = await fetch(
+          `${process.env.NEXT_PUBLIC_SITE_URL}/api/account-request/list`,
+          {
+            method: "GET",
+            headers: { "Content-Type": "application/json" },
+          }
+        );
         const data = await res.json();
 
         const formatted: ExtendedAccountRequest[] = data.requests.map(
